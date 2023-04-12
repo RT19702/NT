@@ -1,0 +1,120 @@
+{
+	"easycom": {
+		"autoscan": true,
+		"custom": {
+			// "Dialog*": "@/components/Dialog/*.vue"
+			"DialogPay": "@/components/Dialog/DialogPay.vue",
+			"DialogTips": "@/components/Dialog/DialogTips.vue"
+		}
+	},
+	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
+		{
+			"path": "pages/tabbar/index",
+			"style": {
+				"navigationBarTitleText": "",
+				"enablePullDownRefresh": false
+			}
+		}, {
+			"path": "pages/tabbar/property",
+			"style": {
+				"navigationBarTitleText": "",
+				"enablePullDownRefresh": false
+			}
+		}, {
+			"path": "pages/tabbar/difi",
+			"style": {
+				"navigationBarTitleText": "",
+				"enablePullDownRefresh": false
+			}
+
+		}, {
+			"path": "pages/tabbar/mine",
+			"style": {
+				"navigationBarTitleText": "",
+				"enablePullDownRefresh": false
+			}
+		}
+	],
+	"subPackages": [{
+		"root": "subpackages",
+		"pages": [{
+			"path": "recommend/recommend",
+			"style": {}
+		}, {
+			"path": "team/team",
+			"style": {
+				"navigationBarTitleText": "",
+				"enablePullDownRefresh": false
+			}
+		}, {
+			"path": "safety/safety",
+			"style": {
+				"navigationBarTitleText": "",
+				"enablePullDownRefresh": false
+			}
+
+		}, {
+			"path": "community/community",
+			"style": {
+				"navigationBarTitleText": "",
+				"enablePullDownRefresh": false
+			}
+
+		}, {
+			"path": "articles/articles",
+			"style": {
+				"navigationBarTitleText": "",
+				"enablePullDownRefresh": false
+			}
+		}, {
+			"path": "articles/article",
+			"style": {
+				"navigationBarTitleText": "",
+				"enablePullDownRefresh": false
+			}
+
+		}, {
+			"path": "transaction/transaction",
+			"style": {
+				"navigationBarTitleText": "",
+				"enablePullDownRefresh": false
+			}
+
+		}]
+	}],
+	"globalStyle": {
+		"navigationStyle": "custom", // 不需要导航栏
+		"navigationBarTextStyle": "black",
+		"navigationBarTitleText": "NT",
+		"navigationBarBackgroundColor": "#F8F8F8",
+		"backgroundColor": "#F8F8F8"
+	},
+	"tabBar": {
+		"backgroundColor": "transparent",
+		"color": "#4c4c4c",
+		"selectedColor": "#fff",
+		"borderStyle": "transparent",
+		"list": [{
+			"pagePath": "pages/tabbar/index",
+			"iconPath": "static/images/tabbar/home.png",
+			"selectedIconPath": "static/images/tabbar/active_home.png",
+			"text": "首页"
+		}, {
+			"pagePath": "pages/tabbar/difi",
+			"iconPath": "static/images/tabbar/difi.png",
+			"selectedIconPath": "static/images/tabbar/active_difi.png",
+			"text": "Difi"
+		}, {
+			"pagePath": "pages/tabbar/property",
+			"iconPath": "static/images/tabbar/property.png",
+			"selectedIconPath": "static/images/tabbar/active_property.png",
+			"text": "资产"
+		}, {
+			"pagePath": "pages/tabbar/mine",
+			"iconPath": "static/images/tabbar/mine.png",
+			"selectedIconPath": "static/images/tabbar/active_mine.png",
+			"text": "我的"
+		}]
+	},
+	"uniIdRouter": {}
+}

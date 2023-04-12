@@ -1,0 +1,58 @@
+{
+  "pages": [
+    "pages/tabbar/index",
+    "pages/tabbar/property",
+    "pages/tabbar/difi",
+    "pages/tabbar/mine"
+  ],
+  "subPackages": [
+    {
+      "root": "subpackages",
+      "pages": [
+        "recommend/recommend",
+        "team/team",
+        "safety/safety"
+      ]
+    }
+  ],
+  "window": {
+    "navigationStyle": "custom",
+    "navigationBarTextStyle": "black",
+    "navigationBarTitleText": "NT",
+    "navigationBarBackgroundColor": "#F8F8F8",
+    "backgroundColor": "#F8F8F8"
+  },
+  "tabBar": {
+    "backgroundColor": "transparent",
+    "color": "#4c4c4c",
+    "selectedColor": "#fff",
+    "borderStyle": "black",
+    "list": [
+      {
+        "pagePath": "pages/tabbar/index",
+        "iconPath": "static/images/tabbar/home.png",
+        "selectedIconPath": "static/images/tabbar/active_home.png",
+        "text": "首页"
+      },
+      {
+        "pagePath": "pages/tabbar/difi",
+        "iconPath": "static/images/tabbar/difi.png",
+        "selectedIconPath": "static/images/tabbar/active_difi.png",
+        "text": "Difi"
+      },
+      {
+        "pagePath": "pages/tabbar/property",
+        "iconPath": "static/images/tabbar/property.png",
+        "selectedIconPath": "static/images/tabbar/active_property.png",
+        "text": "资产"
+      },
+      {
+        "pagePath": "pages/tabbar/mine",
+        "iconPath": "static/images/tabbar/mine.png",
+        "selectedIconPath": "static/images/tabbar/active_mine.png",
+        "text": "我的"
+      }
+    ]
+  },
+  "usingComponents": {}
+}

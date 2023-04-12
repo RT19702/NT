@@ -1,0 +1,224 @@
+@charset "UTF-8";
+/**
+ * 这里是uni-app内置的常用样式变量
+ *
+ * uni-app 官方扩展插件及插件市场（https://ext.dcloud.net.cn）上很多三方插件均使用了这些样式变量
+ * 如果你是插件开发者，建议你使用scss预处理，并在插件代码中直接使用这些变量（无需 import 这个文件），方便用户通过搭积木的方式开发整体风格一致的App
+ *
+ */
+/**
+ * 如果你是App开发者（插件使用者），你可以通过修改这些变量来定制自己的插件主题，实现自定义主题功能
+ *
+ * 如果你的项目同样使用了scss预处理，你也可以直接在你的 scss 代码中使用如下变量，同时无需 import 这个文件
+ */
+/* 颜色变量 */
+/* 行为相关颜色 */
+/* 文字基本颜色 */
+/* 背景颜色 */
+/* 边框颜色 */
+/* 尺寸变量 */
+/* 文字尺寸 */
+/* 图片尺寸 */
+/* Border Radius */
+/* 水平间距 */
+/* 垂直间距 */
+/* 透明度 */
+/* 文章场景相关 */
+.container {
+  background: url(/static/images/common/background.png) no-repeat;
+  background-size: cover;
+}
+.container .section-main {
+  padding: 0 0 40rpx;
+}
+.container .section-main .section-banner {
+  padding: 40rpx 30rpx;
+}
+.container .section-main .section-announcement {
+  background-color: #525157;
+  border-radius: 3px 3px 3px 3px;
+  margin: 50rpx 30rpx;
+  padding: 10rpx 40rpx;
+}
+.container .section-main .section-announcement .image {
+  position: relative;
+}
+.container .section-main .section-announcement .image::after {
+  position: absolute;
+  content: '';
+  right: -30rpx;
+  height: 100%;
+  width: 1px;
+  background: #02458A;
+  top: 50%;
+  -webkit-transform: translateY(-50%);
+          transform: translateY(-50%);
+  opacity: 0.15;
+}
+.container .section-main .section-announcement .text {
+  margin-left: 40rpx;
+}
+.container .section-main .section-icon .item {
+  width: 25%;
+  margin-bottom: 30rpx;
+}
+.container .section-main .section-icon .item .name {
+  color: #fff;
+  margin-top: 15rpx;
+}
+.container .section-main .section-list .title {
+  margin: 0 30rpx;
+}
+.container .section-main .section-list .box_100 {
+  margin: 60rpx 0 0 40rpx;
+}
+.container .section-main .section-list .box_100 .section_8 {
+  width: 100%;
+  height: auto;
+}
+.container .section-main .section-list .box_100 .section_8 .auction {
+  height: 423rpx;
+  margin-top: 40rpx;
+}
+.container .section-main .section-list .box_100 .section_8 .auction .swiper {
+  height: 100%;
+}
+.container .section-main .section-list .box_100 .section_8 .auction .swiper .box_7 {
+  width: 528rpx;
+  height: 422rpx;
+  background: url(data:image/png;base64,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);
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  padding: 20rpx 20rpx 0 20rpx;
+  box-sizing: border-box;
+}
+.container .section-main .section-list .box_100 .section_8 .auction .swiper .box_7 .text-wrapper_11 {
+  display: flex;
+  align-items: center;
+}
+.container .section-main .section-list .box_100 .section_8 .auction .swiper .box_7 .text-wrapper_11 .time {
+  display: flex;
+  align-items: center;
+  color: white;
+  font-size: 24rpx;
+  font-family: AlibabaPuHuiTi_2_55_Regular;
+  margin-left: 20rpx;
+}
+.container .section-main .section-list .box_100 .section_8 .auction .swiper .box_7 .text-wrapper_11 .text_18 {
+  overflow-wrap: break-word;
+  color: white;
+  font-size: 24rpx;
+  font-family: AlibabaPuHuiTi_2_55_Regular;
+  text-align: left;
+  white-space: nowrap;
+  line-height: 28rpx;
+}
+.container .section-main .section-list .box_100 .section_8 .auction .swiper .box_7 .text-wrapper_11 .text_19 {
+  overflow-wrap: break-word;
+  color: white;
+  font-size: 24rpx;
+  font-family: AlibabaPuHuiTi_2_55_Regular;
+  text-align: left;
+  white-space: nowrap;
+  line-height: 28rpx;
+  margin-left: 20rpx;
+}
+.container .section-main .section-list .box_100 .section_8 .auction .swiper .box_7 .text-wrapper_12 {
+  margin: 60rpx 0 0 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.container .section-main .section-list .box_100 .section_8 .auction .swiper .box_7 .text-wrapper_12 .text_20 {
+  overflow-wrap: break-word;
+  color: white;
+  font-size: 34rpx;
+  font-family: AlibabaPuHuiTi_2_65_Medium;
+  text-align: left;
+  white-space: nowrap;
+}
+.container .section-main .section-list .box_100 .section_8 .auction .swiper .box_7 .text-wrapper_12 .text_21 {
+  overflow-wrap: break-word;
+  color: white;
+  font-size: 34rpx;
+  font-family: AlibabaPuHuiTi_2_75_SemiBold;
+  text-align: left;
+  white-space: nowrap;
+}
+.container .section-main .section-list .box_100 .section_8 .auction .swiper .box_7 .text-wrapper_13 {
+  margin: 20rpx 0 0 0;
+}
+.container .section-main .section-list .box_100 .section_8 .auction .swiper .box_7 .text-wrapper_13 .text_22 {
+  width: 80rpx;
+  height: 28rpx;
+  overflow-wrap: break-word;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 28rpx;
+  font-family: AlibabaPuHuiTi_2_55_Regular;
+  text-align: left;
+  white-space: nowrap;
+}
+.container .section-main .section-list .box_100 .section_8 .auction .swiper .box_7 .text-wrapper_13 .text_23 {
+  overflow-wrap: break-word;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 26rpx;
+  font-family: AlibabaPuHuiTi_2_55_Regular;
+  text-align: right;
+  white-space: nowrap;
+}
+.container .section-main .section-list .box_100 .section_8 .auction .swiper .box_7 .box_22 {
+  margin: 40rpx 0 0 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.container .section-main .section-list .box_100 .section_8 .auction .swiper .box_7 .box_22 .block_5 {
+  background-color: white;
+  border-radius: 3px;
+  width: 320rpx;
+}
+.container .section-main .section-list .box_100 .section_8 .auction .swiper .box_7 .box_22 .block_5 .box_9 {
+  width: 100%;
+  height: 12rpx;
+  background-size: 100% 100%;
+}
+.container .section-main .section-list .box_100 .section_8 .auction .swiper .box_7 .box_22 .text_24 {
+  overflow-wrap: break-word;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 24rpx;
+  font-family: AlibabaPuHuiTi_2_55_Regular;
+  text-align: left;
+  white-space: nowrap;
+}
+.container .section-main .section-list .box_100 .section_8 .auction .swiper .box_7 .join-content {
+  margin-top: 30rpx;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.container .section-main .section-list .box_100 .section_8 .auction .swiper .box_7 .join-content .join {
+  width: 20rpx;
+  color: white;
+  font-size: 28rpx;
+  font-family: AlibabaPuHuiTi_2_65_Medium;
+}
+.container .section-main .section-list .box_100 .section_8 .auction .swiper .box_7 .join-content .text-wrapper_6 {
+  background: #fff;
+  min-width: 168rpx;
+  height: 56rpx;
+  margin: 36rpx 0;
+  padding: 0 10rpx;
+}
+.container .section-main .section-list .box_100 .section_8 .auction .swiper .box_7 .join-content .text-wrapper_6 .text_25 {
+  width: 100%;
+  height: 56rpx;
+  overflow-wrap: break-word;
+  color: #000;
+  font-size: 28rpx;
+  font-family: AlibabaPuHuiTi_2_65_Medium;
+  text-align: center;
+  white-space: nowrap;
+  line-height: 56rpx;
+  display: inline-block;
+}
+
