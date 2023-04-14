@@ -29,7 +29,7 @@
           <view class="balance">{{ usdtDetail.usdt || 0 }}</view>
           <view class="d-flex align-items-center">
             <text class="title">配置</text>
-            <text class="number">100.0000</text>
+            <text class="number">{{ user.dispose_u }}</text>
           </view>
         </view>
       </swiper-item>
@@ -161,6 +161,7 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
 import { usdtFlowApi } from "@/api/index.js";
 export default {
   data() {
@@ -180,24 +181,27 @@ export default {
         {
           title: "提现",
           icon: "/static/images/section/withdraw.png",
-          route: "/subpackages/transaction/transaction?type=withdraw",
+          // route: "/subpackages/transaction/transaction?type=withdraw",
         },
       ],
       // current 为 1 时显示的iconList
       ntList: [
-        {
-          title: "转账",
-          icon: "/static/images/section/transfer.png",
-        },
-        {
-          title: "充值",
-          icon: "/static/images/section/recharge.png",
-          route: "/subpackages/transaction/transaction?type=recharge",
-        },
+        // {
+        //   title: "转账",
+        //   icon: "/static/images/section/transfer.png",
+        // },
+        // {
+        //   title: "充值",
+        //   icon: "/static/images/section/recharge.png",
+        //   route: "/subpackages/transaction/transaction?type=recharge",
+        // },
       ],
       detailList: [],
       usdtDetail: {},
     };
+  },
+  computed: {
+    ...mapState("app", ["user"]),
   },
   methods: {
     handleChange(event) {
@@ -208,6 +212,8 @@ export default {
         uni.navigateTo({
           url: item.route,
         });
+      } else {
+        this.$showToast("敬请期待");
       }
     },
     getUsdtFlow() {
@@ -217,7 +223,7 @@ export default {
       });
     },
   },
-  onLoad() {
+  onShow() {
     this.getUsdtFlow();
   },
 };

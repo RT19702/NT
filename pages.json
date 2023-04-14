@@ -100,7 +100,7 @@
 			"selectedIconPath": "static/images/tabbar/active_home.png",
 			"text": "首页"
 		}, {
-			"pagePath": "pages/tabbar/difi",
+			"pagePath": "pages/tabbar/difi1",
 			"iconPath": "static/images/tabbar/difi.png",
 			"selectedIconPath": "static/images/tabbar/active_difi.png",
 			"text": "Difi"

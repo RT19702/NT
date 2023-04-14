@@ -114,13 +114,17 @@
         </view>
       </view>
     </view>
+    <DialogPay
+      :hasVerification.sync="hasVerification"
+      @confirmIdentify="addUser"
+    ></DialogPay>
   </view>
 </template>
 
 <script>
 import { checkUserApi, addUserApi } from "@/api/index.js";
 import { setToken } from "@/utils/auth.js";
-import { mapState, mapMutations } from "vuex"; // 导入Vuex获取钱包地址
+import { mapState, mapMutations, mapActions } from "vuex"; // 导入Vuex获取钱包地址
 export default {
   data() {
     return {
@@ -130,7 +134,7 @@ export default {
         {
           name: "提现",
           icon: "/static/images/icon/withdraw.png",
-          route: "/subpackages/transaction/transaction?type=withdraw",
+          // route: "/subpackages/transaction/transaction?type=withdraw",
         },
         {
           name: "充值",
@@ -144,22 +148,22 @@ export default {
         {
           name: "社区",
           icon: "/static/images/icon/community.png",
-          route: "/subpackages/community/community",
+          // route: "/subpackages/community/community",
         },
         {
           name: "推广",
           icon: "/static/images/icon/promotion.png",
-          route: "/subpackages/recommend/recommend?type=promote",
+          // route: "/subpackages/recommend/recommend?type=promote",
         },
         {
           name: "兑换",
           icon: "/static/images/icon/conversion.png",
-          route: "/subpackages/transaction/transaction?type=exchange",
+          // route: "/subpackages/transaction/transaction?type=exchange",
         },
         {
           name: "商业",
           icon: "/static/images/icon/business.png",
-          route: "/subpackages/articles/articles",
+          // route: "/subpackages/articles/articles",
         },
         {
           name: "收益",
@@ -167,9 +171,12 @@ export default {
         },
       ],
       auctionList: [],
+      invitationCode: "",
+      hasVerification: false, // 弹框
     };
   },
   methods: {
+    ...mapActions("app", ["getUser"]),
     // 获取钱包地址
     async getData() {
       if (window.ethereum) {
@@ -193,6 +200,8 @@ export default {
         uni.navigateTo({
           url: item.route,
         });
+      } else {
+        this.$showToast("敬请期待");
       }
     },
     checkUser() {
@@ -203,18 +212,26 @@ export default {
         if (res.code === 0) {
           setToken(res.data._token);
         } else if (res.code === 404) {
-          this.addUser();
+          if (this.invitationCode) {
+            this.addUser(this.invitationCode);
+          } else {
+            this.hasVerification = true;
+          }
         }
       });
     },
-    addUser() {
+    addUser(value) {
       let params = {
-        invite_code: "177777",
+        invite_code: value,
         address: this.defaultAccount,
       };
       addUserApi(params).then((res) => {
         if (res.code === 0) {
+          this.$showToast(res.msg);
+          this.hasVerification = false;
           setToken(res.data._token);
+        } else {
+          this.$showToast(res.msg);
         }
       });
     },
@@ -228,6 +245,21 @@ export default {
   onLoad() {
     // this.checkUser();
     this.getData();
+    if (window.location.search) {
+      // 获取页面URL参数中的代码
+      const urlParams = new URLSearchParams(window.location.search);
+      const code = urlParams.get("code");
+      // 在代码中查找数字
+      const regex = /\d+/g;
+      const numbers = code.match(regex);
+
+      this.invitationCode = numbers[0];
+      // 打印数字
+      console.log(numbers[0]);
+    }
+  },
+  onShow() {
+    this.getUser();
   },
 };
 </script>

@@ -95,13 +95,15 @@ export default {
               rechargeCallbackApi({
                 hash: transactionHash,
                 order_sn,
-              }).then((res) => {
-                that.$showToast(res.msg);
-                that.$store.dispatch("web3/getBalanceOfUsdt");
-              });
+              })
+                .then((res) => {
+                  that.$showToast(res.msg);
+                  that.$store.dispatch("web3/getBalanceOfUsdt");
+                })
+                .catch((err) => {});
             })
             .catch((err) => {
-              console.error(err);
+              that.$showToast(err.message);
               that.$hideLoading();
             });
         } else {

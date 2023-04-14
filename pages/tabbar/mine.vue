@@ -26,7 +26,7 @@
           <view class="item">
             <view class="title">Luckin</view>
             <view class="address">地址：DSTBHKNFA...13BK1BQ</view>
-            <view class="release">释放权限：0%</view>
+            <view class="release">释放权限：{{ user.release_ratio }}%</view>
           </view>
         </view>
         <u--image
@@ -145,7 +145,7 @@ export default {
   computed: {
     ...mapState("app", ["user"]),
   },
-  onLoad() {
+  onShow() {
     this.getUser();
   },
 };
