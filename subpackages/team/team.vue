@@ -6,11 +6,11 @@
         <view class="item d-flex justify-between">
           <view>
             <view class="title">直推人数</view>
-            <view class="number">39.3411</view>
+            <view class="number">{{ teamMsg.directPush }}</view>
           </view>
           <view>
             <view class="title">间推人数</view>
-            <view class="number">39.3411</view>
+            <view class="number">{{ teamMsg.pushIndirectly }}</view>
           </view>
         </view>
       </view>
@@ -51,7 +51,10 @@ export default {
     getTeam() {
       teamListApi().then((res) => {
         let { data } = res;
-        ({ invite_number: this.teamMsg.directPush } = data);
+        ({
+          invite_number: this.teamMsg.directPush,
+          team_nums: this.teamMsg.pushIndirectly,
+        } = data);
       });
     },
   },

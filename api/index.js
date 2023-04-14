@@ -62,3 +62,37 @@ export function getUserInfoApi() {
         method: 'POST'
     })
 }
+
+/* 充值选项 */
+export function rechargeOptionApi() {
+    return request({
+        url: userUrl + '/RechargeOptions',
+    })
+}
+
+/* 充值 */
+export function rechargeApi(data) {
+    return request({
+        url: userUrl + '/recharge',
+        method: 'POST',
+        data,
+    })
+}
+
+/* 充值回调 */
+export function rechargeCallbackApi(data) {
+    return request({
+        url: userUrl + '/RechargeCallback',
+        method: 'POST',
+        data,
+    })
+}
+
+/* USDT流水 */
+export function usdtFlowApi(data) {
+    return request({
+        url: userUrl + '/USDT_flowWater',
+        method: 'POST',
+        data,
+    })
+}

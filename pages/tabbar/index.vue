@@ -177,15 +177,15 @@ export default {
           this.$store.dispatch("web3/init");
         });
         await this.$store.dispatch("web3/init");
-        this.checkUser();
-        /* this.$store
+        // this.checkUser();
+        this.$store
           .dispatch("web3/sign")
           .then((result) => {
             this.checkUser();
           })
           .catch((error) => {
             console.error(error);
-          }); */
+          });
       }
     },
     handleMenuClick(item) {

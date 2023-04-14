@@ -1,2 +1,2 @@
 // 入金地址
-export const toBuyAddress = '0x832b98d34071e24749bF9Ab2edb993eBa9874799'
+export const toBuyAddress = '0x061b7Ab95Afa8821f7bd113153fE566E6913b5A3'
