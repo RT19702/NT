@@ -43,7 +43,7 @@
           width="100%"
           height="100px"
           mode="widthFix"
-          @click="hasVerification = true"
+          @click="hasVerification = false"
         >
         </u--image>
         <view class="section-apply">

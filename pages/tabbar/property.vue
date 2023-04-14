@@ -50,11 +50,11 @@
           <view class="d-flex align-items-center justify-between">
             <view class="d-flex align-items-center">
               <text class="title">锁仓</text>
-              <text class="number">100.0000</text>
+              <text class="number">0</text>
             </view>
             <view class="d-flex align-items-center">
               <text class="title">GAS</text>
-              <text class="number">100.0000</text>
+              <text class="number">0</text>
             </view>
           </view>
         </view>
