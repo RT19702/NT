@@ -1,24 +1,30 @@
-// import {
-// 	getLanguage
-// } from "@/utils/auth.js"
+import { getUserInfoApi } from "@/api/index.js";
 
 const state = {
-	// isLogin: false,
-	// language: getLanguage() || 'en-us'
+	user: uni.getStorageSync('user') || null,
 }
 
 const mutations = {
-	// setLogin(state) {
-	// 	state.isLogin = true
-	// },
-	// setLang(state,lang){
-	// 	console.log(lang,"lang");
-	// 	state.language = lang
-	// }
+	setUser(state, user) {
+		state.user = user
+		uni.setStorageSync('user', user)
+	}
+}
+
+const actions = {
+	async getUser({ commit }) {
+		const res = await getUserInfoApi()
+		if (res.code === 0) {
+			commit('setUser', res.data)
+		} else {
+			throw new Error(res.msg)
+		}
+	}
 }
 
 export default {
 	namespaced: true,
 	state,
-	mutations
+	mutations,
+	actions
 }

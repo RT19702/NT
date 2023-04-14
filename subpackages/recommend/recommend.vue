@@ -50,13 +50,23 @@ export default {
     };
   },
   methods: {
+    // 获取邀请链接
     getInvite() {
-      inviteApi().then((res) => {
-        if (res.code === 0) {
-          this.invite_url = res.data.invite_url;
-        }
-      });
+      this.$showLoading();
+      inviteApi()
+        .then((res) => {
+          this.$hideLoading();
+          if (res.code === 0) {
+            this.invite_url = res.data.invite_url;
+          } else {
+            this.$showToast(res.msg);
+          }
+        })
+        .catch(() => {
+          this.$showToast("服务异常");
+        });
     },
+    // 复制链接
     copyUrl() {
       uni.setClipboardData({
         data: this.invite_url,
@@ -73,7 +83,9 @@ export default {
   },
   onLoad(options) {
     options.type === "share" ? (this.type = 1) : (this.type = 2);
-    this.getInvite();
+    if (this.type === 1) {
+      this.getInvite();
+    }
   },
 };
 </script>

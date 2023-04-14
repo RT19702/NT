@@ -2,9 +2,11 @@ import App from './App'
 // 引入全局uView
 import uView from '@/uni_modules/uview-ui'
 import store from './store';
-import { showToast } from '@/utils/methods.js';
+import { showToast, showLoading, hideLoading } from '@/utils/methods.js';
 
 Vue.prototype.$showToast = showToast;
+Vue.prototype.$showLoading = showLoading;
+Vue.prototype.$hideLoading = hideLoading;
 
 Vue.use(uView)
 
