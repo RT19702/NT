@@ -9,7 +9,7 @@
             <view class="number">{{ teamMsg.directPush }}</view>
           </view>
           <view>
-            <view class="title">间推人数</view>
+            <view class="title">团队人数</view>
             <view class="number">{{ teamMsg.pushIndirectly }}</view>
           </view>
         </view>
@@ -17,16 +17,21 @@
       <view class="section-details">
         <view class="title"> 团队明细 </view>
         <view class="content">
-          <view class="item" v-for="(item, index) in teamList" :key="index">
+          <view class="item">
             <view class="d-flex justify-between title">
               <view class="column">钱包地址</view>
               <view class="column">推荐人数</view>
               <view class="">团队业绩</view>
             </view>
+          </view>
+          <view class="item" v-for="(item, index) in teamList" :key="index">
             <view class="d-flex justify-between number">
-              <view class="column">{{ item.address }}</view>
-              <view class="column">{{ item.people }}</view>
-              <view class="">{{ item.performance }}</view>
+              <view class="column"
+                >{{ item.address }}
+                <text class="sub-title">{{ item.level_name }}</text>
+              </view>
+              <view class="column">{{ item.team_nums }}</view>
+              <view class="">{{ item.achievement }}</view>
             </view>
           </view>
         </view>
@@ -55,6 +60,9 @@ export default {
           invite_number: this.teamMsg.directPush,
           team_nums: this.teamMsg.pushIndirectly,
         } = data);
+        if (res.code === 0) {
+          this.teamList = res.data.list_data;
+        }
       });
     },
   },
@@ -125,6 +133,11 @@ export default {
 
       &:last-child {
         margin: 0;
+      }
+      .sub-title {
+        color: $theme-color;
+        font-size: 24rpx;
+        margin-left: 10rpx;
       }
     }
 

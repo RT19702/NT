@@ -232,6 +232,7 @@ export default {
           setToken(res.data._token);
         } else {
           this.$showToast(res.msg);
+          this.hasVerification = true;
         }
       });
     },

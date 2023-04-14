@@ -93,15 +93,15 @@
           >
             <view>
               <view class="title">
-                {{ item.title }}
+                {{ item.desc }}
               </view>
               <view class="date">
-                {{ item.createtime }}
+                {{ item.addtime }}
               </view>
             </view>
             <view>
               <view class="number">
-                {{ item.money }}
+                {{ item.adds }}
               </view>
             </view>
           </view>
@@ -137,7 +137,7 @@
         <view class="content">
           <view
             class="item d-flex align-items-center justify-between"
-            v-for="(item, index) in detailList"
+            v-for="(item, index) in ntilList"
             :key="index"
           >
             <view>
@@ -197,6 +197,7 @@ export default {
         // },
       ],
       detailList: [],
+      ntilList: [],
       usdtDetail: {},
     };
   },
@@ -217,9 +218,13 @@ export default {
       }
     },
     getUsdtFlow() {
+      this.detailList = [];
       usdtFlowApi().then((res) => {
-        const { data } = res;
-        this.$set(this.usdtDetail, "usdt", data.usdt);
+        if (res.code === 0) {
+          const { data } = res;
+          this.$set(this.usdtDetail, "usdt", data.usdt);
+          this.detailList.push(...res.data.list_data);
+        }
       });
     },
   },
