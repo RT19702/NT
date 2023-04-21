@@ -90,7 +90,7 @@
 		"backgroundColor": "#F8F8F8"
 	},
 	"tabBar": {
-		"backgroundColor": "transparent",
+		"backgroundColor": "#040611",
 		"color": "#4c4c4c",
 		"selectedColor": "#fff",
 		"borderStyle": "transparent",
@@ -103,7 +103,7 @@
 			"pagePath": "pages/tabbar/difi1",
 			"iconPath": "static/images/tabbar/difi.png",
 			"selectedIconPath": "static/images/tabbar/active_difi.png",
-			"text": "Difi"
+			"text": "资讯"
 		}, {
 			"pagePath": "pages/tabbar/property",
 			"iconPath": "static/images/tabbar/property.png",

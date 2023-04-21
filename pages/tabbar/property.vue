@@ -61,7 +61,7 @@
       </swiper-item>
     </swiper>
     <view class="section-first" v-show="current !== 1">
-      <view class="section-icon d-flex justify-around">
+      <view class="section-icon d-flex justify-around text-center">
         <view
           v-for="(item, index) in usdtList"
           :key="index"
@@ -115,7 +115,7 @@
           :key="index"
           @click="handleRoute(item)"
         >
-          <view class="image">
+          <view class="image d-flex justify-center">
             <u--image
               :showLoading="true"
               :src="item.icon"
@@ -169,10 +169,10 @@ export default {
       current: 0,
       // current 为 0 时显示的iconList
       usdtList: [
-        {
-          title: "转账",
-          icon: "/static/images/section/transfer.png",
-        },
+        // {
+        //   title: "转账",
+        //   icon: "/static/images/section/transfer.png",
+        // },
         {
           title: "充值",
           icon: "/static/images/section/recharge.png",
@@ -186,15 +186,15 @@ export default {
       ],
       // current 为 1 时显示的iconList
       ntList: [
-        // {
-        //   title: "转账",
-        //   icon: "/static/images/section/transfer.png",
-        // },
-        // {
-        //   title: "充值",
-        //   icon: "/static/images/section/recharge.png",
-        //   route: "/subpackages/transaction/transaction?type=recharge",
-        // },
+        {
+          title: "配置U兑换GAS",
+          icon: "/static/images/section/transfer.png",
+        },
+        {
+          title: "可用U购买GAS",
+          icon: "/static/images/section/recharge.png",
+          // route: "/subpackages/transaction/transaction?type=recharge",
+        },
       ],
       detailList: [],
       ntilList: [],

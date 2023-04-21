@@ -1,67 +1,61 @@
 <template>
-  <view class="container">
-    <NavBar :showLeft="false" title="Win by all"> </NavBar>
-    <view class="section-main">
-      <view class="section-banner">
-        <u-swiper
-          :list="bannerList"
-          height="380rpx"
-          imgMode="widthFix"
-        ></u-swiper>
-      </view>
-      <view class="section-announcement d-flex align-items-center">
-        <view class="image">
-          <u--image
+	<view class="container">
+		<NavBar :showLeft="false" title="Win by all"> </NavBar>
+		<view class="section-main">
+			<view class="section-banner">
+				<u-swiper :list="bannerList" height="380rpx" imgMode="widthFix"></u-swiper>
+			</view>
+			<view class="section-announcement d-flex align-items-center">
+				<view class="image">
+					<u--image :showLoading="true" src="/static/images/section/article.png" width="23px" height="28px">
+					</u--image>
+				</view>
+				<view class="text">
+					<u-notice-bar :text="text" bgColor="transparent" color="#b9b8bb" icon=""></u-notice-bar>
+				</view>
+			</view>
+			<view class="section-icon d-flex justify-around">
+				<view class="item d-flex flex-cloumn justify-center align-items-center"
+					v-for="(item, index) in iconList" :key="index" @click="handleMenuClick(item)">
+					<view class="image">
+						<u--image :showLoading="true" :src="item.icon" width="60px" height="60px"></u--image>
+					</view>
+					<view class="name">
+						{{ item.name }}
+					</view>
+				</view>
+			</view>
+			<!-- 抢购活动 -->
+			<view class="section-list">
+				<view class="title">
+					<!-- <u--image
             :showLoading="true"
-            src="/static/images/section/article.png"
-            width="23px"
-            height="28px"
+            src="/static/images/section/dynamic_headings.png"
+            width="380rpx"
+            height="95rpx"
           >
-          </u--image>
-        </view>
-        <view class="text">
-          <u-notice-bar
-            :text="text"
-            bgColor="transparent"
-            color="#b9b8bb"
-            icon=""
-          ></u-notice-bar>
-        </view>
-      </view>
-      <view class="section-icon d-flex justify-around">
-        <view
-          class="item d-flex flex-cloumn justify-center align-items-center"
-          v-for="(item, index) in iconList"
-          :key="index"
-          @click="handleMenuClick(item)"
-        >
-          <view class="image">
-            <u--image
-              :showLoading="true"
-              :src="item.icon"
-              width="60px"
-              height="60px"
-            ></u--image>
-          </view>
-          <view class="name">
-            {{ item.name }}
-          </view>
-        </view>
-      </view>
-      <!-- 抢购活动 -->
-      <view class="section-list">
-        <view class="title">
-          <u--image
-            :showLoading="true"
-            src="/static/images/section/home_title.png"
-            width="203px"
-            height="38px"
-          >
-          </u--image>
-        </view>
-        <view class="box_100">
+          </u--image> -->
+					~ 最新动态
+				</view>
+				<view class="auction">
+					<swiper class="swiper" circular display-multiple-items="2">
+						<swiper-item v-for="(item, index) in sectionSwiper" :key="index">
+							<view class="swiper-item" @click="tips">
+								<view class="content">
+									<view class="title">{{ item.title }}</view>
+									<view class="">
+										<u--image :showLoading="true" :src="item.imageUrl" width="300rpx"
+											height="160rpx"></u--image>
+										<view class="msg">{{ item.msg }}</view>
+									</view>
+								</view>
+							</view>
+						</swiper-item>
+					</swiper>
+				</view>
+				<!-- <view class="box_100">
           <view class="section_8">
-            <!-- <image class="title-images-two" :src="titleList.two" mode="widthFix"></image> -->
+            <image class="title-images-two" :src="titleList.two" mode="widthFix"></image>
             <view class="auction">
               <swiper
                 class="swiper"
@@ -111,221 +105,333 @@
               </swiper>
             </view>
           </view>
-        </view>
-      </view>
-    </view>
-    <DialogPay
-      :hasVerification.sync="hasVerification"
-      @confirmIdentify="addUser"
-    ></DialogPay>
-  </view>
+        </view> -->
+			</view>
+		</view>
+		<DialogPay :hasVerification.sync="hasVerification" @confirmIdentify="addUser"></DialogPay>
+	</view>
 </template>
 
 <script>
-import { checkUserApi, addUserApi } from "@/api/index.js";
-import { setToken } from "@/utils/auth.js";
-import { mapState, mapMutations, mapActions } from "vuex"; // 导入Vuex获取钱包地址
-export default {
-  data() {
-    return {
-      bannerList: ["/static/images/banner/one.png"],
-      text: "关于取消市、区县公司预订政策公告！",
-      iconList: [
-        {
-          name: "提现",
-          icon: "/static/images/icon/withdraw.png",
-          // route: "/subpackages/transaction/transaction?type=withdraw",
-        },
-        {
-          name: "充值",
-          icon: "/static/images/icon/recharge.png",
-          route: "/subpackages/transaction/transaction?type=recharge",
-        },
-        {
-          name: "转账",
-          icon: "/static/images/icon/transfer.png",
-        },
-        {
-          name: "社区",
-          icon: "/static/images/icon/community.png",
-          // route: "/subpackages/community/community",
-        },
-        {
-          name: "推广",
-          icon: "/static/images/icon/promotion.png",
-          // route: "/subpackages/recommend/recommend?type=promote",
-        },
-        {
-          name: "兑换",
-          icon: "/static/images/icon/conversion.png",
-          // route: "/subpackages/transaction/transaction?type=exchange",
-        },
-        {
-          name: "商业",
-          icon: "/static/images/icon/business.png",
-          // route: "/subpackages/articles/articles",
-        },
-        {
-          name: "收益",
-          icon: "/static/images/icon/earnings.png",
-        },
-      ],
-      auctionList: [],
-      invitationCode: "",
-      hasVerification: false, // 弹框
-    };
-  },
-  methods: {
-    ...mapActions("app", ["getUser"]),
-    // 获取钱包地址
-    async getData() {
-      if (window.ethereum) {
-        window.ethereum.on("accountsChanged", () => {
-          this.$store.dispatch("web3/init");
-        });
-        await this.$store.dispatch("web3/init");
-        // this.checkUser();
-        this.$store
-          .dispatch("web3/sign")
-          .then((result) => {
-            this.checkUser();
-          })
-          .catch((error) => {
-            console.error(error);
-          });
-      }
-    },
-    handleMenuClick(item) {
-      if (item.route) {
-        uni.navigateTo({
-          url: item.route,
-        });
-      } else {
-        this.$showToast("敬请期待");
-      }
-    },
-    checkUser() {
-      let params = {
-        address: this.defaultAccount,
-      };
-      checkUserApi(params).then((res) => {
-        if (res.code === 0) {
-          setToken(res.data._token);
-        } else if (res.code === 404) {
-          if (this.invitationCode) {
-            this.addUser(this.invitationCode);
-          } else {
-            this.hasVerification = true;
-          }
-        }
-      });
-    },
-    addUser(value) {
-      let params = {
-        invite_code: value,
-        address: this.defaultAccount,
-      };
-      addUserApi(params).then((res) => {
-        if (res.code === 0) {
-          this.$showToast(res.msg);
-          this.hasVerification = false;
-          setToken(res.data._token);
-        } else {
-          this.$showToast(res.msg);
-          this.hasVerification = true;
-        }
-      });
-    },
-  },
-  computed: {
-    /* 钱包地址 */
-    ...mapState({
-      defaultAccount: (state) => state.web3.defaultAccount,
-    }),
-  },
-  onLoad() {
-    // this.checkUser();
-    this.getData();
-    if (window.location.search) {
-      // 获取页面URL参数中的代码
-      const urlParams = new URLSearchParams(window.location.search);
-      const code = urlParams.get("code");
-      // 在代码中查找数字
-      const regex = /\d+/g;
-      const numbers = code.match(regex);
+	import {
+		checkUserApi,
+		addUserApi
+	} from "@/api/index.js";
+	import {
+		setToken
+	} from "@/utils/auth.js";
+	import {
+		mapState,
+		mapMutations,
+		mapActions
+	} from "vuex"; // 导入Vuex获取钱包地址
+	import uSwiper from "../../uni_modules/uview-ui/components/u-swiper/u-swiper.vue";
+	export default {
+		components: {
+			uSwiper
+		},
+		data() {
+			return {
+				bannerList: ["/static/images/banner/two.png"],
+				text: "关于取消市、区县公司预订政策公告！",
+				iconList: [{
+						name: "NT共识",
+						icon: "/static/images/win_all/consensus.png",
+					},
+					{
+						name: "社区",
+						icon: "/static/images/win_all/community.png",
+					},
+					{
+						name: "商业",
+						icon: "/static/images/win_all/business.png",
+					},
+					{
+						name: "公益",
+						icon: "/static/images/win_all/public_benefit.png",
+					},
+					{
+						name: "NFT",
+						icon: "/static/images/win_all/nft.png",
+					},
+					{
+						name: "WEB3",
+						icon: "/static/images/win_all/web3.png",
+					},
+					{
+						name: "META",
+						icon: "/static/images/win_all/meta.png",
+					},
+					{
+						name: "AI",
+						icon: "/static/images/win_all/ai.png",
+					},
+				],
+				/* [{
+				    name: "提现",
+				    icon: "/static/images/icon/withdraw.png",
+				    // route: "/subpackages/transaction/transaction?type=withdraw",
+				  },
+				  {
+				    name: "充值",
+				    icon: "/static/images/icon/recharge.png",
+				    route: "/subpackages/transaction/transaction?type=recharge",
+				  },
+				  {
+				    name: "转账",
+				    icon: "/static/images/icon/transfer.png",
+				  },
+				  {
+				    name: "社区",
+				    icon: "/static/images/icon/community.png",
+				    // route: "/subpackages/community/community",
+				  },
+				  {
+				    name: "推广",
+				    icon: "/static/images/icon/promotion.png",
+				    // route: "/subpackages/recommend/recommend?type=promote",
+				  },
+				  {
+				    name: "兑换",
+				    icon: "/static/images/icon/conversion.png",
+				    // route: "/subpackages/transaction/transaction?type=exchange",
+				  },
+				  {
+				    name: "商业",
+				    icon: "/static/images/icon/business.png",
+				    route: "/subpackages/articles/articles",
+				  },
+				  {
+				    name: "收益",
+				    icon: "/static/images/icon/earnings.png",
+				  }, ] */
+				auctionList: [],
+				invitationCode: "",
+				hasVerification: false, // 弹框
+				sectionSwiper: [{
+						id: 1,
+						title: "共识专区",
+						imageUrl: "/static/images/section/gold.png",
+						msg: "2号仓 即将开启",
+					},
+					{
+						id: 2,
+						title: "资讯专区",
+						imageUrl: "/static/images/section/gold.png",
+						msg: "国际旅游研讨会，相约盛宴",
+					},
+					// 更多数据...
+				],
+			};
+		},
+		methods: {
+			...mapActions("app", ["getUser"]),
+			// 获取钱包地址
+			async getData() {
+				if (window.ethereum) {
+					window.ethereum.on("accountsChanged", () => {
+						this.$store.dispatch("web3/init");
+					});
+					await this.$store.dispatch("web3/init");
+					// this.checkUser();
+					this.$store
+						.dispatch("web3/sign")
+						.then((result) => {
+							this.checkUser();
+						})
+						.catch((error) => {
+							console.error(error);
+						});
+				}
+			},
+			handleMenuClick(item) {
+				if (item.route) {
+					uni.navigateTo({
+						url: item.route,
+					});
+				} else {
+					this.$showToast("敬请期待");
+				}
+			},
+			checkUser() {
+				let params = {
+					address: this.defaultAccount,
+				};
+				checkUserApi(params).then((res) => {
+					if (res.code === 0) {
+						this.getUser();
+						setToken(res.data._token);
+					} else if (res.code === 404) {
+						if (this.invitationCode) {
+							this.addUser(this.invitationCode);
+						} else {
+							this.hasVerification = true;
+						}
+					}
+				});
+			},
+			addUser(value) {
+				let params = {
+					invite_code: value,
+					address: this.defaultAccount,
+				};
+				addUserApi(params).then((res) => {
+					if (res.code === 0) {
+						this.$showToast(res.msg);
+						this.getUser();
+						this.hasVerification = false;
+						setToken(res.data._token);
+					} else {
+						this.$showToast(res.msg);
+						this.hasVerification = true;
+					}
+				});
+			},
+			tips() {
+				this.$showToast("敬请期待");
+			},
+		},
+		computed: {
+			/* 钱包地址 */
+			...mapState({
+				defaultAccount: (state) => state.web3.defaultAccount,
+			}),
+		},
+		onLoad() {
+			// this.checkUser();
+			this.getData();
+			if (window.location.search) {
+				// 获取页面URL参数中的代码
+				const urlParams = new URLSearchParams(window.location.search);
+				const code = urlParams.get("code");
+				// 在代码中查找数字
+				const regex = /\d+/g;
+				const numbers = code.match(regex);
 
-      this.invitationCode = numbers[0];
-      // 打印数字
-      console.log(numbers[0]);
-    }
-  },
-  onShow() {
-    this.getUser();
-  },
-};
+				this.invitationCode = numbers[0];
+				// 打印数字
+				console.log(numbers[0]);
+			}
+		},
+		onShow() {
+			// this.getUser();
+		},
+	};
 </script>
 
 <style lang="scss">
-.container {
-  background: url("@/static/images/common/background.png") no-repeat;
-  background-size: cover;
+	.container {
+		background: url("@/static/images/common/background.png") no-repeat;
+		background-size: cover;
 
-  .section-main {
-    padding: 0 0 40rpx;
+		.section-main {
+			padding: 0 0 40rpx;
 
-    .section-banner {
-      padding: 40rpx 30rpx;
-    }
+			.section-banner {
+				padding: 40rpx 30rpx;
+			}
 
-    .section-announcement {
-      background-color: rgb(82, 81, 87);
-      border-radius: 3px 3px 3px 3px;
-      margin: 50rpx 30rpx;
-      padding: 10rpx 40rpx;
+			.section-announcement {
+				background-color: rgb(82, 81, 87);
+				border-radius: 3px 3px 3px 3px;
+				margin: 10rpx 30rpx 50rpx;
+				padding: 10rpx 40rpx;
 
-      //
-      .image {
-        position: relative;
+				//
+				.image {
+					position: relative;
 
-        &::after {
-          position: absolute;
-          content: "";
-          right: -30rpx;
-          height: 100%;
-          width: 1px;
-          background: #02458a;
-          top: 50%;
-          transform: translateY(-50%);
-          opacity: 0.15;
-        }
-      }
+					&::after {
+						position: absolute;
+						content: "";
+						right: -30rpx;
+						height: 100%;
+						width: 1px;
+						background: #02458a;
+						top: 50%;
+						transform: translateY(-50%);
+						opacity: 0.15;
+					}
+				}
 
-      .text {
-        margin-left: 40rpx;
-      }
-    }
+				.text {
+					margin-left: 40rpx;
+				}
+			}
 
-    .section-icon {
-      .item {
-        width: 25%;
-        margin-bottom: 30rpx;
+			.section-icon {
+				.item {
+					width: 25%;
+					margin-bottom: 30rpx;
 
-        .image {
-        }
+					.image {}
 
-        .name {
-          color: #fff;
-          margin-top: 15rpx;
-        }
-      }
-    }
+					.name {
+						color: #fff;
+						margin-top: 15rpx;
+					}
+				}
+			}
 
-    .section-list {
-      .title {
-        margin: 0 30rpx;
-      }
+			.section-list {
+				margin-top: 5rpx;
 
-      .box_100 {
+				>.title {
+					margin: 0 30rpx;
+					font-size: 40rpx;
+					color: #fff;
+					font-family: AlibabaPuHuiTi_2_65_Medium;
+					font-weight: bold;
+				}
+
+				.auction {
+					height: 423rpx;
+					padding: 0 20rpx;
+					margin-top: 40rpx;
+
+					.swiper {
+						height: 100%;
+
+						.swiper-item {
+							position: relative;
+
+							.content {
+								width: 340rpx;
+								height: 290rpx;
+								// background: linear-gradient(270deg, #D7AE73 0%, #DBC395 100%);
+								background: url("@/static/images/section/coverage.png");
+								background-repeat: no-repeat;
+								background-size: 100% 100%;
+								// margin-top: 40rpx;
+								padding: 70rpx 20rpx 0 20rpx;
+								box-sizing: border-box;
+
+								.title {
+									position: absolute;
+									font-weight: bold;
+									top: 6rpx;
+									left: 15rpx;
+									color: #1a181e;
+								}
+
+								.msg {
+									margin-top: 10rpx;
+									color: #000;
+									font-size: 32rpx;
+									overflow: hidden;
+									/* 隐藏多余文本 */
+									white-space: nowrap;
+									font-family: AlibabaPuHuiTi_2_55_Regular;
+									/* 在一行中显示 */
+									text-overflow: ellipsis;
+									/* 超过一行显示省略号 */
+								}
+							}
+						}
+					}
+				}
+
+				/* .box_100 {
         margin: 60rpx 0 0 40rpx;
 
         .section_8 {
@@ -534,8 +640,8 @@ export default {
             }
           }
         }
-      }
-    }
-  }
-}
+      } */
+			}
+		}
+	}
 </style>

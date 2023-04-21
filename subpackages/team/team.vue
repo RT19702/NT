@@ -26,8 +26,8 @@
           </view>
           <view class="item" v-for="(item, index) in teamList" :key="index">
             <view class="d-flex justify-between number">
-              <view class="column"
-                >{{ item.address }}
+              <view class="column d-flex align-items-end">
+                <view class="address">{{ item.address }}</view>
                 <text class="sub-title">{{ item.level_name }}</text>
               </view>
               <view class="column">{{ item.team_nums }}</view>
@@ -130,19 +130,25 @@ export default {
       padding-bottom: 30rpx;
       margin-bottom: 30rpx;
       border-bottom: 1px solid #6c6868;
-
       &:last-child {
         margin: 0;
       }
       .sub-title {
         color: $theme-color;
-        font-size: 24rpx;
+        font-size: 23rpx;
         margin-left: 10rpx;
       }
     }
 
     .column {
       flex: 1;
+    }
+
+    .address {
+      overflow: hidden; /* 隐藏多余文本 */
+      white-space: nowrap; /* 在一行中显示 */
+      text-overflow: ellipsis; /* 超过一行显示省略号 */
+      width: 100rpx;
     }
 
     .title {
