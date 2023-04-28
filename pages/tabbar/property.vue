@@ -1,9 +1,24 @@
 <template>
   <view>
     <NavBar title="ASSETS" :showLeft="false"></NavBar>
+    <view class="swiper-tips d-flex align-items-center justify-center">
+      <view
+        class="item"
+        :class="[current === 0 ? 'active' : '']"
+        @click="toggleOption(0)"
+        >USDT</view
+      >
+      <view
+        class="item"
+        :class="[current === 1 ? 'active' : '']"
+        @click="toggleOption(1)"
+        >NT</view
+      >
+    </view>
+    <!-- :indicator-dots="true" -->
     <swiper
       class="section-swiper"
-      :indicator-dots="true"
+      :current="current"
       :autoplay="false"
       :interval="3000"
       :duration="1000"
@@ -26,7 +41,7 @@
             <view class="money">USDT</view>
           </view>
           <view class="usable">可用USDT</view>
-          <view class="balance">{{ usdtDetail.usdt || 0 }}</view>
+          <view class="balance">{{ user.usdt || 0 }}</view>
           <view class="d-flex align-items-center">
             <text class="title">配置</text>
             <text class="number">{{ user.dispose_u }}</text>
@@ -46,72 +61,24 @@
             <view class="money">NT</view>
           </view>
           <view class="usable">可用NT</view>
-          <view class="balance">0</view>
+          <view class="balance">{{ user.nt }}</view>
           <view class="d-flex align-items-center justify-between">
             <view class="d-flex align-items-center">
               <text class="title">锁仓</text>
-              <text class="number">0</text>
+              <text class="number">{{ user.lock_nt }}</text>
             </view>
             <view class="d-flex align-items-center">
               <text class="title">GAS</text>
-              <text class="number">0</text>
+              <text class="number">{{ user.ntgas }}</text>
             </view>
           </view>
         </view>
       </swiper-item>
     </swiper>
-    <view class="section-first" v-show="current !== 1">
+    <view class="section-first">
       <view class="section-icon d-flex justify-around text-center">
         <view
-          v-for="(item, index) in usdtList"
-          :key="index"
-          @click="handleRoute(item)"
-        >
-          <view class="image">
-            <u--image
-              :showLoading="true"
-              :src="item.icon"
-              width="57px"
-              height="57px"
-            ></u--image>
-          </view>
-          <view class="title">
-            {{ item.title }}
-          </view>
-        </view>
-      </view>
-      <view class="section-list">
-        <view class="d-flex title">
-          <view class="item current">可用明细</view>
-          <view class="item">配置明细</view>
-        </view>
-        <view class="content">
-          <view
-            class="item d-flex align-items-center justify-between"
-            v-for="(item, index) in detailList"
-            :key="index"
-          >
-            <view>
-              <view class="title">
-                {{ item.desc }}
-              </view>
-              <view class="date">
-                {{ item.addtime }}
-              </view>
-            </view>
-            <view>
-              <view class="number">
-                {{ item.adds }}
-              </view>
-            </view>
-          </view>
-        </view>
-      </view>
-    </view>
-    <view class="section-second" v-show="current == 1">
-      <view class="section-icon d-flex justify-around">
-        <view
-          v-for="(item, index) in ntList"
+          v-for="(item, index) in gatherMsg[current].iconList"
           :key="index"
           @click="handleRoute(item)"
         >
@@ -128,33 +95,41 @@
           </view>
         </view>
       </view>
-      <view class="section-list">
-        <view class="d-flex title">
-          <view class="item current">可用明细</view>
-          <view class="item">锁仓明细</view>
-          <view class="item">GAS明细</view>
+    </view>
+    <view class="section-list">
+      <view class="d-flex title">
+        <view
+          class="item"
+          :class="[gatherMsg[current].active === index ? 'current' : '']"
+          v-for="(item, index) in gatherMsg[current].titleList"
+          :key="index"
+          @click="toggleActive(index)"
+        >
+          {{ item.title }}
         </view>
-        <view class="content">
+      </view>
+      <view class="content">
+        <u-list @scrolltolower="scrolltolower" height="550rpx">
           <view
             class="item d-flex align-items-center justify-between"
-            v-for="(item, index) in ntilList"
+            v-for="(item, index) in gatherList[current].list"
             :key="index"
           >
             <view>
               <view class="title">
-                {{ item.title }}
+                {{ item.desc }}
               </view>
               <view class="date">
-                {{ item.createtime }}
+                {{ item.addtime }}
               </view>
             </view>
             <view>
-              <view class="number">
-                {{ item.money }}
+              <view class="number" :class="[item.adds ? 'adds' : 'reduce']">
+                {{ item.adds ? item.adds.toFixed(2) : item.reduce.toFixed(2) }}
               </view>
             </view>
           </view>
-        </view>
+        </u-list>
       </view>
     </view>
   </view>
@@ -162,52 +137,103 @@
 
 <script>
 import { mapState } from "vuex";
-import { usdtFlowApi } from "@/api/index.js";
+import { currencyListApi } from "@/api/index.js";
 export default {
   data() {
     return {
       current: 0,
-      // current 为 0 时显示的iconList
-      usdtList: [
-        // {
-        //   title: "转账",
-        //   icon: "/static/images/section/transfer.png",
-        // },
-        {
-          title: "充值",
-          icon: "/static/images/section/recharge.png",
-          route: "/subpackages/transaction/transaction?type=recharge",
+      // 集合列表
+      gatherMsg: {
+        0: {
+          active: 0,
+          titleList: [
+            {
+              title: "可用明细",
+            },
+            {
+              title: "配置明细",
+            },
+          ],
+          iconList: [
+            // {
+            //   title: "转账",
+            //   icon: "/static/images/section/transfer.png",
+            // },
+            {
+              title: "充值",
+              icon: "/static/images/section/recharge.png",
+              route:
+                "/subpackages/transaction/transaction?type=recharge&currency=USDT",
+            },
+            {
+              title: "提现",
+              icon: "/static/images/section/withdraw.png",
+              route: "/subpackages/transaction/transaction?type=withdraw",
+            },
+          ],
         },
-        {
-          title: "提现",
-          icon: "/static/images/section/withdraw.png",
-          // route: "/subpackages/transaction/transaction?type=withdraw",
+        1: {
+          active: 0,
+          titleList: [
+            {
+              title: "可用明细",
+            },
+            {
+              title: "GAS明细",
+            },
+          ],
+          iconList: [
+            {
+              title: "配置U兑换GAS",
+              icon: "/static/images/section/transfer.png",
+              route: "/subpackages/transaction/transaction?type=exchange",
+            },
+            {
+              title: "充值NT",
+              icon: "/static/images/section/recharge.png",
+              route:
+                "/subpackages/transaction/transaction?type=recharge&currency=NT",
+            },
+            {
+              title: "可用U购买GAS",
+              icon: "/static/images/section/recharge.png",
+              route: "/subpackages/transaction/transaction?type=purchase",
+            },
+          ],
         },
-      ],
-      // current 为 1 时显示的iconList
-      ntList: [
-        {
-          title: "配置U兑换GAS",
-          icon: "/static/images/section/transfer.png",
+      },
+      // 集合数据
+      gatherList: {
+        0: {
+          page: 1,
+          list: [],
+          isEnd: true,
         },
-        {
-          title: "可用U购买GAS",
-          icon: "/static/images/section/recharge.png",
-          // route: "/subpackages/transaction/transaction?type=recharge",
+        1: {
+          page: 1,
+          list: [],
+          isEnd: true,
         },
-      ],
-      detailList: [],
-      ntilList: [],
-      usdtDetail: {},
+      },
     };
   },
   computed: {
     ...mapState("app", ["user"]),
   },
   methods: {
+    toggleOption(index) {
+      this.current = index;
+    },
+    // 轮播图切换
     handleChange(event) {
       this.current = event.detail.current;
+      this.getFlow();
+      // let current = this.gatherList[this.current];
+      // current.page = 1;
+      // current.list = [];
+      // current.isEnd = true;
     },
+    // 路由跳转
     handleRoute(item) {
       if (item.route) {
         uni.navigateTo({
@@ -217,26 +243,82 @@ export default {
         this.$showToast("敬请期待");
       }
     },
-    getUsdtFlow() {
-      this.detailList = [];
-      usdtFlowApi().then((res) => {
-        if (res.code === 0) {
-          const { data } = res;
-          this.$set(this.usdtDetail, "usdt", data.usdt);
-          this.detailList.push(...res.data.list_data);
-        }
-      });
+    // 切换选项
+    toggleActive(index) {
+      this.gatherMsg[this.current].active = index;
+      let current = this.gatherList[this.current];
+      current.page = 1;
+      current.list = [];
+      current.isEnd = true;
+      this.getFlow();
+    },
+    scrolltolower() {
+      this.getFlow();
+    },
+    getFlow() {
+      const active = this.gatherMsg[this.current].active;
+      const currency = this.current === 0 ? active + 1 : active === 0 ? 3 : 4;
+      const params = {
+        page: this.gatherList[this.current].page,
+        type: currency,
+      };
+      if (this.gatherList[this.current].isEnd) {
+        this.getCurrencyList(params);
+      }
+    },
+    getCurrencyList(params) {
+      currencyListApi(params)
+        .then((res) => {
+          let current = this.gatherList[this.current];
+          let { data } = res;
+          if (data.list_data && data.list_data.length) {
+            current.page++;
+            current.list.push(...data.list_data);
+          } else {
+            current.isEnd = false;
+          }
+        })
+        .catch((err) => {});
     },
   },
-  onShow() {
-    this.getUsdtFlow();
+  onLoad() {
+    this.getFlow();
   },
 };
 </script>
 
 <style lang="scss">
+.white {
+  color: #fff;
+  font-family: AlibabaPuHuiTi_2_65_Medium;
+}
+.swiper-tips {
+  margin-top: 10rpx;
+  .item {
+    font-family: AlibabaPuHuiTi_2_65_Medium;
+    font-size: 40rpx;
+    color: #adadb1;
+    &:last-child {
+      margin-left: 40rpx;
+    }
+  }
+  .active {
+    color: $theme-color;
+    position: relative;
+    &::after {
+      position: absolute;
+      content: "";
+      width: 70%;
+      height: 8rpx;
+      background-color: $theme-color;
+      bottom: -10rpx;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+  }
+}
 .section-swiper {
-  margin-top: 45rpx;
+  margin-top: 50rpx;
   height: 350rpx;
 
   .swiper-item {
@@ -294,7 +376,7 @@ export default {
 }
 
 .section-icon {
-  margin-top: 40rpx;
+  // margin-top: 0rpx;
 
   .title {
     margin-top: 20rpx;
@@ -315,7 +397,6 @@ export default {
 
     .item {
       margin-right: 40rpx;
-
       &:last-child {
         margin: 0;
       }
@@ -335,6 +416,7 @@ export default {
     .item {
       padding-bottom: 30rpx;
       border-bottom: 1px solid #6d6969;
+      margin-bottom: 20rpx;
 
       .title {
         font-size: 30rpx;
@@ -350,6 +432,10 @@ export default {
       .number {
         font-size: 38rpx;
         color: $theme-color;
+      }
+
+      .reduce {
+        color: #ff4646;
       }
     }
   }

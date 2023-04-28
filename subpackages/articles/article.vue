@@ -3,26 +3,33 @@
     <NavBar title="众赢金融"></NavBar>
     <view class="section-content">
       <view class="title text-center">{{ particulars.title }}</view>
-      <!-- <view class="date text-center">2022.12.12 18：20</view> -->
+      <view class="date text-center">{{ particulars.addtime }}</view>
       <view v-html="particulars.content"></view>
     </view>
   </view>
 </template>
 
 <script>
+import { articleDetailApi } from "@/api/index.js";
 export default {
   data() {
     return {
-      params: {
-        announce_id: "",
-      },
-      particulars: {
-        title: "众赢金融众赢金融众赢金融众赢金融众",
-        content: "",
-      },
+      particulars: {},
     };
   },
-  methods: {},
+  methods: {
+    getArticleDetail(id) {
+      const params = {
+        a_id: id,
+      };
+      articleDetailApi(params).then((res) => {
+        this.particulars = res.data;
+      });
+    },
+  },
+  onLoad(options) {
+    this.getArticleDetail(options.id);
+  },
 };
 </script>
 

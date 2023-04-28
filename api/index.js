@@ -89,10 +89,125 @@ export function rechargeCallbackApi(data) {
 }
 
 /* USDT流水 */
-export function usdtFlowApi(data) {
+/* export function usdtFlowApi(data) {
     return request({
         url: userUrl + '/USDT_flowWater',
         method: 'POST',
         data,
+    })
+} */
+
+/* 货币  明细流水 */
+export function currencyListApi(data) {
+    return request({
+        url: userUrl + '/CurrencyDetails',
+        method: 'POST',
+        data,
+    })
+}
+
+/* 活动列表 */
+export function activityListApi() {
+    return request({
+        url: activityUrl + '/ActivityList',
+        method: 'POST'
+    })
+}
+
+
+/* 仓  下 全部活动 */
+export function storeActivityApi(data) {
+    return request({
+        url: activityUrl + '/storehouseActivity',
+        method: 'POST',
+        data,
+    })
+}
+
+/* 购买等级列表 */
+export function buyLevelListApi() {
+    return request({
+        url: userUrl + '/buy_levelList',
+        method: 'POST'
+    })
+}
+
+/* 购买等级 */
+export function buyLevelApi(data) {
+    return request({
+        url: userUrl + '/submit_buyLevel',
+        method: 'POST',
+        data
+    })
+}
+
+/* 参加活动 */
+export function crowdFundApi(data) {
+    return request({
+        url: activityUrl + '/crowdfund_partake_new',
+        method: 'POST',
+        data
+    })
+}
+
+/* 兑换货币 */
+export function exchangeCurrencyApi(data) {
+    return request({
+        url: userUrl + '/exchange_type',
+        method: 'POST',
+        data
+    })
+}
+
+/* 首页  最新动态 */
+export function newsListApi() {
+    return request({
+        url: activityUrl + '/GetNewestDynamic',
+        method: 'POST'
+    })
+}
+
+/* 配置U  购买释放权限 */
+export function buyReleaseApi(data) {
+    return request({
+        url: userUrl + '/buy_ReleasePermissions',
+        method: 'POST',
+        data
+    })
+}
+
+/* 参与记录 */
+export function rushBuyListApi(data) {
+    return request({
+        url: userUrl + '/rush_buy_list',
+        method: 'POST',
+        data
+    })
+}
+
+/* 文章列表 */
+export function articleListApi(data) {
+    return request({
+        url: indexUrl + '/businessArticle_list',
+        method: 'POST',
+        data
+    })
+}
+
+/* 文章详情 */
+export function articleDetailApi(data) {
+    return request({
+        url: indexUrl + '/Article_details',
+        method: 'POST',
+        data
+    })
+}
+
+/* 提现 */
+export function withdrawApi(data) {
+    return request({
+        url: indexUrl + '/withdrawal',
+        method: 'POST',
+        data
     })
 }

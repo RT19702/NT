@@ -19,21 +19,23 @@
         <view class="content">
           <view class="item">
             <view class="d-flex justify-between title">
-              <view class="column">钱包地址</view>
+              <view class="column">用户ID</view>
               <view class="column">推荐人数</view>
               <view class="">团队业绩</view>
             </view>
           </view>
-          <view class="item" v-for="(item, index) in teamList" :key="index">
-            <view class="d-flex justify-between number">
-              <view class="column d-flex align-items-end">
-                <view class="address">{{ item.address }}</view>
-                <text class="sub-title">{{ item.level_name }}</text>
+          <u-list @scrolltolower="scrolltolower" height="600rpx">
+            <view class="item" v-for="(item, index) in teamList" :key="index">
+              <view class="d-flex justify-between number">
+                <view class="column d-flex align-items-end">
+                  <view class="address">{{ item.user_id }}</view>
+                  <text class="sub-title">{{ item.level_name }}</text>
+                </view>
+                <view class="column">{{ item.team_nums }}</view>
+                <view class="">{{ item.achievement }}</view>
               </view>
-              <view class="column">{{ item.team_nums }}</view>
-              <view class="">{{ item.achievement }}</view>
             </view>
-          </view>
+          </u-list>
         </view>
       </view>
     </view>
@@ -49,19 +51,27 @@ export default {
         directPush: 0, // 直推人数
         pushIndirectly: 0, // 间推人数
       },
+      page: 1,
       teamList: [],
     };
   },
   methods: {
+    scrolltolower() {
+      this.getTeam();
+    },
     getTeam() {
-      teamListApi().then((res) => {
+      const params = {
+        page: this.page,
+      };
+      teamListApi(params).then((res) => {
         let { data } = res;
         ({
           invite_number: this.teamMsg.directPush,
           team_nums: this.teamMsg.pushIndirectly,
         } = data);
         if (res.code === 0) {
-          this.teamList = res.data.list_data;
+          this.page++;
+          this.teamList.push(...res.data.list_data);
         }
       });
     },
@@ -148,7 +158,7 @@ export default {
       overflow: hidden; /* 隐藏多余文本 */
       white-space: nowrap; /* 在一行中显示 */
       text-overflow: ellipsis; /* 超过一行显示省略号 */
-      width: 100rpx;
+      // width: 100rpx;
     }
 
     .title {

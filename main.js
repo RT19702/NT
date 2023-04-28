@@ -3,12 +3,16 @@ import App from './App'
 import uView from '@/uni_modules/uview-ui'
 import store from './store';
 import { showToast, showLoading, hideLoading } from '@/utils/methods.js';
-
+import filters from '@/common/filters';
 Vue.prototype.$showToast = showToast;
 Vue.prototype.$showLoading = showLoading;
 Vue.prototype.$hideLoading = hideLoading;
 
-Vue.use(uView)
+Vue.use(uView);
+
+Object.keys(filters).forEach(key => {
+	Vue.filter(key, filters[key])
+});
 
 // #ifndef VUE3
 import Vue from 'vue'

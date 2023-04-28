@@ -6,7 +6,7 @@ import {
 	setAddress,
 	removeAddress
 } from '@/utils/auth';
-const USDT = require('@/common/usdt.json');
+const USDT = require('@/common/ABI/usdt.json');
 
 const state = {
 	web3: {},

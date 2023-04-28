@@ -32,6 +32,9 @@ function request({ url, data = {}, method = "GET" }) {
             },
             fail: (err) => {
                 reject(err)
+            },
+            complete: () => {
+                uni.hideLoading()
             }
         })
     })

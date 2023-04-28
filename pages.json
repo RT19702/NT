@@ -14,20 +14,22 @@
 				"navigationBarTitleText": "",
 				"enablePullDownRefresh": false
 			}
-		}, {
+		},
+		{
 			"path": "pages/tabbar/property",
 			"style": {
 				"navigationBarTitleText": "",
 				"enablePullDownRefresh": false
 			}
-		}, {
+		},
+		{
 			"path": "pages/tabbar/difi",
 			"style": {
 				"navigationBarTitleText": "",
 				"enablePullDownRefresh": false
 			}
-
-		}, {
+		},
+		{
 			"path": "pages/tabbar/mine",
 			"style": {
 				"navigationBarTitleText": "",
@@ -35,53 +37,80 @@
 			}
 		}
 	],
-	"subPackages": [{
-		"root": "subpackages",
-		"pages": [{
-			"path": "recommend/recommend",
-			"style": {}
-		}, {
-			"path": "team/team",
-			"style": {
-				"navigationBarTitleText": "",
-				"enablePullDownRefresh": false
-			}
-		}, {
-			"path": "safety/safety",
-			"style": {
-				"navigationBarTitleText": "",
-				"enablePullDownRefresh": false
-			}
-
-		}, {
-			"path": "community/community",
-			"style": {
-				"navigationBarTitleText": "",
-				"enablePullDownRefresh": false
-			}
-
-		}, {
-			"path": "articles/articles",
-			"style": {
-				"navigationBarTitleText": "",
-				"enablePullDownRefresh": false
-			}
-		}, {
-			"path": "articles/article",
-			"style": {
-				"navigationBarTitleText": "",
-				"enablePullDownRefresh": false
-			}
-
-		}, {
-			"path": "transaction/transaction",
-			"style": {
-				"navigationBarTitleText": "",
-				"enablePullDownRefresh": false
-			}
-
-		}]
-	}],
+	"subPackages": [
+		{
+			"root": "subpackages",
+			"pages": [
+				{
+					"path": "recommend/recommend",
+					"style": {}
+				},
+				{
+					"path": "team/team",
+					"style": {
+						"navigationBarTitleText": "",
+						"enablePullDownRefresh": false
+					}
+				},
+				{
+					"path": "safety/safety",
+					"style": {
+						"navigationBarTitleText": "",
+						"enablePullDownRefresh": false
+					}
+				},
+				{
+					"path": "community/community",
+					"style": {
+						"navigationBarTitleText": "",
+						"enablePullDownRefresh": false
+					}
+				},
+				{
+					"path": "articles/articles",
+					"style": {
+						"navigationBarTitleText": "",
+						"enablePullDownRefresh": false
+					}
+				},
+				{
+					"path": "articles/article",
+					"style": {
+						"navigationBarTitleText": "",
+						"enablePullDownRefresh": false
+					}
+				},
+				{
+					"path": "transaction/transaction",
+					"style": {
+						"navigationBarTitleText": "",
+						"enablePullDownRefresh": false
+					}
+				},
+				{
+					"path": "consensus/consensus",
+					"style": {
+						"navigationBarTitleText": "",
+						"enablePullDownRefresh": false
+					}
+				},
+				{
+					"path": "consensus/consensusDetail",
+					"style": {
+						"navigationBarTitleText": "",
+						"enablePullDownRefresh": true
+					}
+				},
+				{
+					"path": "consensus/consensusRecording",
+					"style": {
+						"navigationBarTitleText": "",
+						"enablePullDownRefresh": false
+					}
+				}
+			]
+		}
+	],
 	"globalStyle": {
 		"navigationStyle": "custom", // 不需要导航栏
 		"navigationBarTextStyle": "black",
@@ -94,27 +123,32 @@
 		"color": "#4c4c4c",
 		"selectedColor": "#fff",
 		"borderStyle": "transparent",
-		"list": [{
-			"pagePath": "pages/tabbar/index",
-			"iconPath": "static/images/tabbar/home.png",
-			"selectedIconPath": "static/images/tabbar/active_home.png",
-			"text": "首页"
-		}, {
-			"pagePath": "pages/tabbar/difi1",
-			"iconPath": "static/images/tabbar/difi.png",
-			"selectedIconPath": "static/images/tabbar/active_difi.png",
-			"text": "资讯"
-		}, {
-			"pagePath": "pages/tabbar/property",
-			"iconPath": "static/images/tabbar/property.png",
-			"selectedIconPath": "static/images/tabbar/active_property.png",
-			"text": "资产"
-		}, {
-			"pagePath": "pages/tabbar/mine",
-			"iconPath": "static/images/tabbar/mine.png",
-			"selectedIconPath": "static/images/tabbar/active_mine.png",
-			"text": "我的"
-		}]
+		"list": [
+			{
+				"pagePath": "pages/tabbar/index",
+				"iconPath": "static/images/tabbar/home.png",
+				"selectedIconPath": "static/images/tabbar/active_home.png",
+				"text": "首页"
+			},
+			{
+				"pagePath": "pages/tabbar/difi",
+				"iconPath": "static/images/tabbar/difi.png",
+				"selectedIconPath": "static/images/tabbar/active_difi.png",
+				"text": "资讯"
+			},
+			{
+				"pagePath": "pages/tabbar/property",
+				"iconPath": "static/images/tabbar/property.png",
+				"selectedIconPath": "static/images/tabbar/active_property.png",
+				"text": "资产"
+			},
+			{
+				"pagePath": "pages/tabbar/mine",
+				"iconPath": "static/images/tabbar/mine.png",
+				"selectedIconPath": "static/images/tabbar/active_mine.png",
+				"text": "我的"
+			}
+		]
 	},
 	"uniIdRouter": {}
 }

@@ -68,7 +68,10 @@
 				this.value.length < 6 ? this.value += val : ''
 			},
 			confirmIdentify() {
-				this.value.length == 6 ? this.$emit("confirmIdentify", this.value) : ''
+				if (this.value.length == 6) {
+					this.$emit("confirmIdentify", this.value)
+					this.value = ''
+				}
 			},
 			backIdentify() {
 				if (this.value.length) {

@@ -1,29 +1,37 @@
 <template>
   <view class="wrapper">
     <NavBar :title="pageTitle"></NavBar>
+    <DialogPay
+      :hasVerification.sync="hasVerification"
+      @confirmIdentify="confirmIdentify"
+    >
+      <view slot="title">支付密码</view>
+      <view slot="main-title">请输入支付密码进行认购</view>
+    </DialogPay>
     <view class="container">
       <view class="section-form">
         <!-- 提现 -->
-        <Withdraw v-if="type === 'withdraw'" />
-        <!-- 充值 -->
+        <Withdraw v-if="type === 'withdraw'" :amount.sync="amount" />
+        <!-- 充值USDT -->
         <Recharge
           v-if="type === 'recharge'"
           :rechargeOption.sync="rechargeOption"
         />
         <!-- 兑换 -->
-        <Exchange v-if="type === 'exchange'" />
-        <!-- <view class="item d-flex align-items-center justify-between">
-          <view class="label">交易密码</view>
-          <view class="control">
-            <u--input
-              placeholder="请输入交易密码"
-              border="surround"
-              inputAlign="right"
-              color="#fff"
-              placeholderClass="placeholder-color"
-            ></u--input>
-          </view>
-        </view> -->
+        <Exchange v-if="type === 'exchange'" :amount.sync="amount">
+          <view slot="price">配置U余额：{{ user.dispose_u }}</view>
+        </Exchange>
+        <Exchange v-if="type === 'purchase'" :amount.sync="amount">
+          <view slot="title">购买类型</view>
+          <view slot="label">购买数量</view>
+          <view slot="price">USDT余额：{{ user.usdt }}</view>
+        </Exchange>
+        <view class="tips" v-show="amount && type === 'purchase'"
+          >需扣除USDT：{{ amount }}</view
+        >
+        <view class="tips" v-show="amount && type === 'exchange'"
+          >需扣除配置U：{{ Number(amount * 1.2).toFixed(2) }}</view
+        >
       </view>
       <view class="button">
         <u-button
@@ -39,7 +47,13 @@
 </template>
 
 <script>
-import { rechargeApi, rechargeCallbackApi } from "@/api/index.js";
+import {
+  rechargeApi,
+  rechargeCallbackApi,
+  exchangeCurrencyApi,
+  withdrawApi,
+} from "@/api/index.js";
+import { mapState, mapActions } from "vuex";
 import BigNumber from "bignumber.js";
 import Withdraw from "./withdraw.vue";
 import Recharge from "./recharge.vue";
@@ -56,20 +70,132 @@ export default {
         withdraw: "提现",
         recharge: "充值",
         exchange: "兑换",
+        purchase: "购买",
       },
       type: "withdraw", // 默认值为提现
       rechargeOption: {},
+      amount: null,
+      hasVerification: false,
     };
   },
   methods: {
+    ...mapActions("app", ["getUser"]),
     transaction() {
-      if (this.type === "recharge" && this.rechargeOption.amount) {
-        this.recharge();
-      } else {
-        this.$showToast("请选择充值金额");
+      switch (this.type) {
+        // 提现
+        case "withdraw":
+          if (this.amount) {
+            this.withdrawal();
+          } else {
+            this.$showToast("请填写提现金额");
+          }
+          break;
+        // 购买
+        case "purchase":
+          if (this.amount) {
+            // this.purchase();
+            this.hasVerification = true;
+          } else {
+            this.$showToast("请输入购买数量");
+          }
+          break;
+        // 兑换
+        case "exchange":
+          if (this.amount) {
+            // this.exchange();
+            this.hasVerification = true;
+          } else {
+            this.$showToast("请输入兑换数量");
+          }
+          break;
+        // 充值USDT
+        case "recharge":
+          if (this.rechargeOption.amount) {
+            this.rechargeUsdt();
+          } else {
+            this.$showToast("请选择充值金额");
+          }
+          break;
+
+        default:
+          this.$showToast("请选择操作类型");
+          break;
       }
     },
-    recharge() {
+    // 确认支付密码
+    confirmIdentify(cipher) {
+      this.hasVerification = false;
+      switch (this.type) {
+        // 购买
+        case "purchase":
+          this.purchase(cipher);
+          break;
+        // 兑换
+        case "exchange":
+          this.exchange(cipher);
+          break;
+
+        default:
+          break;
+      }
+    },
+    // 提现
+    withdrawal() {
+      const params = {
+        type: 1,
+        amount: this.amount,
+      };
+      this.$showLoading("交易中");
+      withdrawApi(params).then((res) => {
+        if (res.code === 0) {
+          this.$showToast("提现成功");
+          this.getUser();
+          this.amount = null;
+        } else {
+          this.$showToast(res.msg);
+        }
+      });
+    },
+    // 购买
+    purchase(cipher) {
+      const params = {
+        type: 2,
+        pay_type: 1,
+        nums: this.amount,
+        pay_pass: cipher,
+      };
+      this.$showLoading("交易中");
+      exchangeCurrencyApi(params).then((res) => {
+        if (res.code === 0) {
+          this.$showToast("购买成功");
+          this.getUser();
+          this.amount = null;
+        } else {
+          this.$showToast(res.msg);
+        }
+      });
+    },
+    // 兑换
+    exchange(cipher) {
+      const params = {
+        type: 2,
+        pay_type: 2,
+        nums: this.amount,
+        pay_pass: cipher,
+      };
+      this.$showLoading("交易中");
+      exchangeCurrencyApi(params).then((res) => {
+        if (res.code === 0) {
+          this.$showToast("兑换成功");
+          this.getUser();
+          this.amount = null;
+        } else {
+          this.$showToast(res.msg);
+        }
+      });
+    },
+    // 充值
+    rechargeUsdt() {
       const that = this;
       const { toBuyAddress } = require("@/common/setting.js");
       let swapamount = BigNumber(this.rechargeOption.amount)
@@ -113,6 +239,7 @@ export default {
     },
   },
   computed: {
+    ...mapState("app", ["user"]),
     pageTitle() {
       return this.typeMap[this.type];
     },
@@ -139,7 +266,10 @@ export default {
 
 .section-form {
   flex: 1;
-
+  .tips {
+    color: $theme-color;
+    font-size: 28rpx;
+  }
   .item {
     padding: 20rpx 25rpx;
     background-color: rgba(255, 255, 255, 0.1);

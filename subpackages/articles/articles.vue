@@ -2,51 +2,59 @@
   <view>
     <NavBar title="商业"></NavBar>
     <view class="seciton-list">
-      <view
-        class="item d-flex align-items-center"
-        v-for="(item, index) in detailList"
-        :key="index"
-        @click="handlerClick"
-      >
-        <view>
-          <u--image
-            :showLoading="true"
-            src="https://cdn.uviewui.com/uview/album/1.jpg"
-            width="200rpx"
-            height="160rpx"
-          ></u--image>
+      <u-list @scrolltolower="scrolltolower">
+        <view
+          class="item d-flex align-items-center"
+          v-for="(item, index) in detailList"
+          :key="index"
+          @click="handlerClick(item)"
+        >
+          <view>
+            <u--image
+              :showLoading="true"
+              src="/static/images/section/gold.png"
+              width="200rpx"
+              height="160rpx"
+            ></u--image>
+          </view>
+          <view class="content">
+            <view class="title">{{ item.title }}</view>
+            <view class="msg"> {{ item.content | filterHtml }} </view>
+            <view class="date">{{ item.addtime }}</view>
+          </view>
         </view>
-        <view class="content">
-          <view class="title">{{ item.title }}</view>
-          <view class="msg">{{ item.msg }}</view>
-          <view class="date">{{ item.date }}</view>
-        </view>
-      </view>
+      </u-list>
     </view>
   </view>
 </template>
 
 <script>
+import { articleListApi } from "@/api/index.js";
 export default {
   data() {
     return {
-      detailList: [
-        {
-          img: "",
-          title: "众赢金融",
-          msg: "众赢金融众赢金融众赢金融众赢金融众...",
-          date: "2022.12.12  18：20",
-        },
-      ],
+      page: 1,
+      detailList: [],
     };
   },
   methods: {
-    handlerClick() {
-      console.log("click");
-      uni.navigateTo({
-        url: "/subpackages/articles/article",
+    async getArticleList() {
+      const params = {
+        page: this.page,
+        type: 0,
+      };
+      await articleListApi(params).then((res) => {
+        this.detailList.push(...res.data.list_data);
       });
     },
+    handlerClick(item) {
+      uni.navigateTo({
+        url: "/subpackages/articles/article?id=" + item.id,
+      });
+    },
+  },
+  onLoad() {
+    this.getArticleList();
   },
 };
 </script>
@@ -74,6 +82,11 @@ export default {
         margin-bottom: 16rpx;
         color: #a3a2a6;
         font-size: 25rpx;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
       }
 
       .date {

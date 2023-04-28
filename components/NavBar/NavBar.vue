@@ -84,4 +84,8 @@ export default {
   color: #ffffff;
   font-family: ZiZhiQuXiMaiTi;
 }
+
+.nav-bar-right{
+	color: #fff;
+}
 </style>

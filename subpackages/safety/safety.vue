@@ -87,6 +87,13 @@ export default {
 </script>
 
 <style lang="scss">
+/deep/ .nav-bar {
+  .nav-bar-title {
+    font-family: cursive;
+    font-weight: bold;
+  }
+}
+
 .wrapper {
   height: 100%;
 }
