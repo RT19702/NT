@@ -88,6 +88,7 @@
               <view
                 class="swiper-item"
                 v-if="newestDynamic.dynamic && newestDynamic.dynamic.content"
+                @click="handleMenuClick(newestDynamic.dynamic)"
               >
                 <view class="content">
                   <view class="title">资讯专区</view>
@@ -334,6 +335,10 @@ export default {
       } else if (item.storehouse_id) {
         uni.navigateTo({
           url: `/subpackages/consensus/consensusDetail?id=${item.storehouse_id}&title=${item.storehouse_name}`,
+        });
+      } else if (item.id) {
+        uni.navigateTo({
+          url: "/subpackages/articles/article?id=" + item.id,
         });
       } else {
         this.$showToast("敬请期待");

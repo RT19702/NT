@@ -6,7 +6,9 @@ import {
 	setAddress,
 	removeAddress
 } from '@/utils/auth';
+// 
 const USDT = require('@/common/ABI/usdt.json');
+const SET = require('@/common/ABI/set.json');
 
 const state = {
 	web3: {},
@@ -102,6 +104,53 @@ const actions = {
 		} = new web3.eth.Contract(
 			USDT.abi,
 			USDT.address
+		).methods;
+		return transfer(to, amount).send({
+			from: defaultAccount
+		})
+	},
+	// 进行BNB原生代币支付
+	transferBnb(context, {
+		amount,
+		to
+	}) {
+		const {
+			defaultAccount,
+			web3
+		} = state;
+		return new Promise((resolve, reject) => {
+			web3.eth.sendTransaction({
+				from: defaultAccount,
+				to,
+				value: web3.utils.toWei(amount.toString(), 'ether')
+			})
+				.once('transactionHash', (hash) => {
+					console.log(`Transaction hash: ${hash}`);
+				})
+				.once('receipt', (receipt) => {
+					console.log(`Transaction receipt: ${receipt}`);
+					resolve(receipt);
+				})
+				.once('error', (error) => {
+					console.error(`Transaction error: ${error}`);
+					reject(error);
+				});
+		});
+	},
+	// 进行SET代币支付
+	transferSet(context, {
+		amount,
+		to
+	}) {
+		const {
+			defaultAccount,
+			web3
+		} = state;
+		const {
+			transfer
+		} = new web3.eth.Contract(
+			SET.abi,
+			SET.address
 		).methods;
 		return transfer(to, amount).send({
 			from: defaultAccount

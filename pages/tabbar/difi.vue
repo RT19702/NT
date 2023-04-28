@@ -2,7 +2,7 @@
   <view>
     <NavBar title="资讯" :showLeft="false"></NavBar>
     <view class="seciton-list">
-      <u-list @scrolltolower="scrolltolower">
+      <u-list @scrolltolower="scrolltolower" height="800rpx">
         <view
           class="item d-flex align-items-center"
           v-for="(item, index) in detailList"
@@ -20,7 +20,7 @@
           <view class="content">
             <view class="title">{{ item.title }}</view>
             <view class="msg"> {{ item.content | filterHtml }} </view>
-            <view class="date">{{ item.addtime }}</view>
+            <view class="date">{{ item.addtime | filterTime }}</view>
           </view>
         </view>
       </u-list>
@@ -38,13 +38,19 @@ export default {
     };
   },
   methods: {
+    scrolltolower() {
+      this.getArticleList();
+    },
     async getArticleList() {
       const params = {
         page: this.page,
         type: 1,
       };
       await articleListApi(params).then((res) => {
-        this.detailList.push(...res.data.list_data);
+        if (res.data.list_data && res.data.list_data.length) {
+          this.page++;
+          this.detailList.push(...res.data.list_data);
+        }
       });
     },
     handlerClick(item) {

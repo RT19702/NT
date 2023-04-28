@@ -13,9 +13,14 @@
         <!-- 提现 -->
         <Withdraw v-if="type === 'withdraw'" :amount.sync="amount" />
         <!-- 充值USDT -->
-        <Recharge
-          v-if="type === 'recharge'"
+        <RechargeUsdt
+          v-if="type === 'recharge' && rechargeType === 'USDT'"
           :rechargeOption.sync="rechargeOption"
+        />
+        <!-- 充值NT -->
+        <RechargeNT
+          v-if="type === 'recharge' && rechargeType === 'NT'"
+          :amount.sync="amount"
         />
         <!-- 兑换 -->
         <Exchange v-if="type === 'exchange'" :amount.sync="amount">
@@ -56,13 +61,15 @@ import {
 import { mapState, mapActions } from "vuex";
 import BigNumber from "bignumber.js";
 import Withdraw from "./withdraw.vue";
-import Recharge from "./recharge.vue";
+import RechargeUsdt from "./recharge.vue";
+import RechargeNT from "./rechargeNt.vue";
 import Exchange from "./exchange.vue";
 export default {
   components: {
     Exchange,
-    Recharge,
+    RechargeUsdt,
     Withdraw,
+    RechargeNT,
   },
   data() {
     return {
@@ -73,6 +80,7 @@ export default {
         purchase: "购买",
       },
       type: "withdraw", // 默认值为提现
+      rechargeType: "USDT", // 默认值为usdt
       rechargeOption: {},
       amount: null,
       hasVerification: false,
@@ -110,10 +118,16 @@ export default {
           break;
         // 充值USDT
         case "recharge":
-          if (this.rechargeOption.amount) {
-            this.rechargeUsdt();
+          if (this.amount || this.rechargeOption.amount) {
+            if (this.rechargeType === "USDT") {
+              this.rechargeUsdt();
+            } else if (this.rechargeType === "NT") {
+              this.rechargeNT();
+            } else {
+              this.$showToast("请选择充值类型");
+            }
           } else {
-            this.$showToast("请选择充值金额");
+            this.$showToast("请填写充值金额");
           }
           break;
 
@@ -194,7 +208,7 @@ export default {
         }
       });
     },
-    // 充值
+    // 充值USDT
     rechargeUsdt() {
       const that = this;
       const { toBuyAddress } = require("@/common/setting.js");
@@ -237,6 +251,49 @@ export default {
         }
       });
     },
+    // 充值NT
+    rechargeNT() {
+      const that = this;
+      const params = {
+        type: 1,
+        pay_type: 3,
+        nums: this.amount,
+      };
+      const { toBuyAddress } = require("@/common/setting.js");
+      // let swapamount = BigNumber(this.amount).times(1e18).toFixed(0);
+      exchangeCurrencyApi(params).then((res) => {
+        if (res.code === 0) {
+          let { order_sn, amount } = res.data;
+          that.$showLoading("交易中");
+          /* 2、提交支付 */
+          that.$store
+            .dispatch("web3/transferSet", {
+              amount: BigNumber(amount).times(1e18).toFixed(0),
+              to: toBuyAddress,
+            })
+            .then((res) => {
+              that.$hideLoading();
+              const transactionHash = res.transactionHash;
+              rechargeCallbackApi({
+                hash: transactionHash,
+                order_sn,
+              })
+                .then((res) => {
+                  that.$showToast(res.msg);
+                  that.amount = null;
+                  // that.$store.dispatch("web3/getBalanceOfUsdt");
+                })
+                .catch((err) => {});
+            })
+            .catch((err) => {
+              that.$showToast(err.message);
+              that.$hideLoading();
+            });
+        } else {
+          that.$showToast(res.msg);
+        }
+      });
+    },
   },
   computed: {
     ...mapState("app", ["user"]),
@@ -245,9 +302,16 @@ export default {
     },
   },
   onLoad(options) {
-    if (options.type && Object.keys(this.typeMap).includes(options.type)) {
-      this.type = options.type;
-    }
+    Object.assign(this, {
+      rechargeType: options.currency || this.rechargeType,
+      type:
+        options.type && Object.keys(this.typeMap).includes(options.type)
+          ? options.type
+          : this.type,
+    });
+  },
+  mounted() {
+    console.log(this.$data);
   },
 };
 </script>

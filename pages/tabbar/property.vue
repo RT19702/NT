@@ -136,7 +136,7 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapState, mapActions } from "vuex";
 import { currencyListApi } from "@/api/index.js";
 export default {
   data() {
@@ -221,6 +221,7 @@ export default {
     ...mapState("app", ["user"]),
   },
   methods: {
+    ...mapActions("app", ["getUser"]),
     toggleOption(index) {
       this.current = index;
     },
@@ -283,6 +284,9 @@ export default {
   },
   onLoad() {
     this.getFlow();
+  },
+  onShow() {
+    this.getUser();
   },
 };
 </script>

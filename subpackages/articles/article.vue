@@ -3,7 +3,9 @@
     <NavBar title="众赢金融"></NavBar>
     <view class="section-content">
       <view class="title text-center">{{ particulars.title }}</view>
-      <view class="date text-center">{{ particulars.addtime }}</view>
+      <view class="date text-center">{{
+        particulars.addtime | filterTime
+      }}</view>
       <view v-html="particulars.content"></view>
     </view>
   </view>
