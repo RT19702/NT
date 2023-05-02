@@ -189,7 +189,7 @@ export default {
               route: "/subpackages/transaction/transaction?type=exchange",
             },
             {
-              title: "充值NT",
+              title: "SET兑换NT",
               icon: "/static/images/section/recharge.png",
               route:
                 "/subpackages/transaction/transaction?type=recharge&currency=NT",

@@ -320,10 +320,11 @@ export default {
         this.$store
           .dispatch("web3/sign")
           .then((result) => {
+						console.log(result,"result");
             this.checkUser();
           })
           .catch((error) => {
-            console.error(error);
+						console.log(error,"error");
           });
       }
     },

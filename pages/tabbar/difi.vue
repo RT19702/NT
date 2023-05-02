@@ -47,7 +47,7 @@ export default {
         type: 1,
       };
       await articleListApi(params).then((res) => {
-        if (res.data.list_data && res.data.list_data.length) {
+        if (res.data && res.data.list_data) {
           this.page++;
           this.detailList.push(...res.data.list_data);
         }
