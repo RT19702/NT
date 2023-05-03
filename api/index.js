@@ -90,11 +90,11 @@ export function rechargeCallbackApi(data) {
 
 /* USDT流水 */
 /* export function usdtFlowApi(data) {
-    return request({
-        url: userUrl + '/USDT_flowWater',
-        method: 'POST',
-        data,
-    })
+		return request({
+				url: userUrl + '/USDT_flowWater',
+				method: 'POST',
+				data,
+		})
 } */
 
 /* 货币  明细流水 */
@@ -215,7 +215,7 @@ export function withdrawApi(data) {
 /* 充值——新 */
 export function rechargeNewApi(data) {
 	return request({
-		url: userUrl + '/withdrawal',
+		url: userUrl + '/recharge_new',
 		method: 'POST',
 		data
 	})

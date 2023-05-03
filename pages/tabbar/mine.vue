@@ -46,7 +46,7 @@
               height="63px"
               radius="20"
             ></u--image>
-            <!-- <view class="level">v1</view> -->
+            <view class="level">{{ user.level_name }}</view>
           </view>
           <view class="item">
             <view class="title">{{ user.user_id }}</view>
@@ -239,11 +239,12 @@ export default {
 
       .level {
         position: absolute;
-        padding: 0rpx 10rpx;
+        padding: 0rpx 13rpx;
         background: linear-gradient(180deg, #d7ae73 0%, #dbc395 100%);
         border-radius: 4px 4px 4px 1px;
-        right: -5rpx;
+        // right: -5rpx;
         bottom: -5rpx;
+        font-size: 20rpx;
       }
     }
 
