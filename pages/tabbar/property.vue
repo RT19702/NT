@@ -1,98 +1,77 @@
 <template>
-  <view>
+  <view class="wrapper">
     <NavBar title="ASSETS" :showLeft="false"></NavBar>
-    <view class="swiper-tips d-flex align-items-center justify-center">
-      <view
-        class="item"
-        :class="[current === 0 ? 'active' : '']"
-        @click="toggleOption(0)"
-        >USDT</view
-      >
-      <view
-        class="item"
-        :class="[current === 1 ? 'active' : '']"
-        @click="toggleOption(1)"
-        >NT</view
-      >
-    </view>
-    <!-- :indicator-dots="true" -->
-    <swiper
-      class="section-swiper"
-      :current="current"
-      :autoplay="false"
-      :interval="3000"
-      :duration="1000"
-      next-margin="50rpx"
-      previous-margin="50rpx"
-      indicator-active-color="#D2AE78"
-      indicator-color="#7B7B7B"
-      @change="handleChange"
-    >
-      <swiper-item>
-        <view class="swiper-item first">
-          <view class="info d-flex">
-            <u--image
-              :showLoading="true"
-              src="/static/images/common/usdt.png"
-              width="23px"
-              height="23px"
-            >
-            </u--image>
-            <view class="money">USDT</view>
-          </view>
-          <view class="usable">可用USDT</view>
-          <view class="balance">{{ user.usdt || 0 }}</view>
-          <view class="d-flex align-items-center">
-            <text class="title">配置</text>
-            <text class="number">{{ user.dispose_u }}</text>
-          </view>
-        </view>
-      </swiper-item>
-      <swiper-item>
-        <view class="swiper-item second">
-          <view class="info d-flex">
-            <u--image
-              :showLoading="true"
-              src="/static/images/common/nt.png"
-              width="23px"
-              height="23px"
-            >
-            </u--image>
-            <view class="money">NT</view>
-          </view>
-          <view class="usable">可用NT</view>
-          <view class="balance">{{ user.nt }}</view>
-          <view class="d-flex align-items-center justify-between">
-            <view class="d-flex align-items-center">
-              <text class="title">锁仓</text>
-              <text class="number">{{ user.lock_nt }}</text>
-            </view>
-            <view class="d-flex align-items-center">
-              <text class="title">GAS</text>
-              <text class="number">{{ user.ntgas }}</text>
-            </view>
-          </view>
-        </view>
-      </swiper-item>
-    </swiper>
-    <view class="section-first">
-      <view class="section-icon d-flex justify-around text-center">
+    <view class="swiper-item first">
+      <view class="usable">可用USDT</view>
+      <view class="info d-flex">
+        <u--image
+          :showLoading="true"
+          src="/static/images/common/usdt.png"
+          width="23px"
+          height="23px"
+        >
+        </u--image>
+        <view class="money">USDT</view>
+      </view>
+      <view class="balance">{{ user.usdt || 0 }}</view>
+      <view class="d-flex align-items-center">
+        <text class="title">配置</text>
+        <text class="number">{{ user.dispose_u }}</text>
+      </view>
+      <view class="d-flex justify-end">
         <view
-          v-for="(item, index) in gatherMsg[current].iconList"
+          class="d-flex align-items-center icon-item justify-between"
+          v-for="(item, index) in gatherMsg.USDT.iconList"
           :key="index"
           @click="handleRoute(item)"
         >
-          <view class="image d-flex justify-center">
-            <u--image
-              :showLoading="true"
-              :src="item.icon"
-              width="57px"
-              height="57px"
-            ></u--image>
-          </view>
-          <view class="title">
-            {{ item.title }}
-          </view>
+          <u--image
+            :showLoading="true"
+            :src="item.icon"
+            width="40rpx"
+            height="40rpx"
+          ></u--image>
+          <text>{{ item.title }}</text>
+        </view>
+      </view>
+    </view>
+    <view class="swiper-item second">
+      <view class="info d-flex">
+        <u--image
+          :showLoading="true"
+          src="/static/images/common/nt.png"
+          width="23px"
+          height="23px"
+        >
+        </u--image>
+        <view class="money">NT</view>
+      </view>
+      <view class="usable">可用NT</view>
+      <view class="balance">{{ user.nt }}</view>
+      <view class="d-flex align-items-center justify-between">
+        <view class="d-flex align-items-center">
+          <text class="title">锁仓</text>
+          <text class="number">{{ user.lock_nt }}</text>
+        </view>
+        <view class="d-flex align-items-center">
+          <text class="title">GAS</text>
+          <text class="number">{{ user.ntgas }}</text>
+        </view>
+      </view>
+      <view class="d-flex justify-end">
+        <view
+          class="d-flex align-items-center icon-item justify-between"
+          v-for="(item, index) in gatherMsg.NT.iconList"
+          :key="index"
+          @click="handleRoute(item)"
+        >
+          <u--image
+            :showLoading="true"
+            :src="item.icon"
+            width="40rpx"
+            height="40rpx"
+          ></u--image>
+          <text>{{ item.title }}</text>
         </view>
       </view>
     </view>
@@ -100,16 +79,16 @@
       <view class="d-flex title">
         <view
           class="item"
-          :class="[gatherMsg[current].active === index ? 'current' : '']"
-          v-for="(item, index) in gatherMsg[current].titleList"
+          :class="[current == index ? 'current' : '']"
+          v-for="(item, index) in gatherTitle"
           :key="index"
           @click="toggleActive(index)"
         >
-          {{ item.title }}
+          {{ item }}
         </view>
       </view>
       <view class="content">
-        <u-list @scrolltolower="scrolltolower" height="550rpx">
+        <u-list @scrolltolower="scrolltolower" height="600rpx">
           <view
             class="item d-flex align-items-center justify-between"
             v-for="(item, index) in gatherList[current].list"
@@ -142,23 +121,16 @@ export default {
   data() {
     return {
       current: 0,
+      gatherTitle: {
+        0: "USDT明细",
+        1: "配置明细",
+        2: "NT明细",
+        3: "GAS明细",
+      },
       // 集合列表
       gatherMsg: {
-        0: {
-          active: 0,
-          titleList: [
-            {
-              title: "可用明细",
-            },
-            {
-              title: "配置明细",
-            },
-          ],
+        USDT: {
           iconList: [
-            // {
-            //   title: "转账",
-            //   icon: "/static/images/section/transfer.png",
-            // },
             {
               title: "充值",
               icon: "/static/images/section/recharge.png",
@@ -172,44 +144,44 @@ export default {
             },
           ],
         },
-        1: {
-          active: 0,
-          titleList: [
-            {
-              title: "可用明细",
-            },
-            {
-              title: "GAS明细",
-            },
-          ],
+        NT: {
           iconList: [
             {
-              title: "配置U兑换GAS",
+              title: "充值",
               icon: "/static/images/section/transfer.png",
-              route: "/subpackages/transaction/transaction?type=exchange",
-            },
-            {
-              title: "SET兑换NT",
-              icon: "/static/images/section/recharge.png",
               route:
                 "/subpackages/transaction/transaction?type=recharge&currency=NT",
             },
             {
-              title: "可用U购买GAS",
+              title: "兑换",
               icon: "/static/images/section/recharge.png",
-              route: "/subpackages/transaction/transaction?type=purchase",
+              route: "/subpackages/transaction/transaction?type=exchange",
             },
           ],
         },
       },
       // 集合数据
       gatherList: {
+        // USDT
         0: {
           page: 1,
           list: [],
           isEnd: true,
         },
+        // 配置U
         1: {
+          page: 1,
+          list: [],
+          isEnd: true,
+        },
+        // NT
+        2: {
+          page: 1,
+          list: [],
+          isEnd: true,
+        },
+        // NTGAS
+        3: {
           page: 1,
           list: [],
           isEnd: true,
@@ -222,18 +194,6 @@ export default {
   },
   methods: {
     ...mapActions("app", ["getUser"]),
-    toggleOption(index) {
-      this.current = index;
-    },
-    // 轮播图切换
-    handleChange(event) {
-      this.current = event.detail.current;
-      this.getFlow();
-      // let current = this.gatherList[this.current];
-      // current.page = 1;
-      // current.list = [];
-      // current.isEnd = true;
-    },
     // 路由跳转
     handleRoute(item) {
       if (item.route) {
@@ -246,22 +206,23 @@ export default {
     },
     // 切换选项
     toggleActive(index) {
-      this.gatherMsg[this.current].active = index;
+      this.current = index;
+      this.getFlow();
+      /* this.gatherMsg[this.current].active = index;
       let current = this.gatherList[this.current];
       current.page = 1;
       current.list = [];
       current.isEnd = true;
-      this.getFlow();
+      this.getFlow(); */
     },
     scrolltolower() {
       this.getFlow();
     },
     getFlow() {
-      const active = this.gatherMsg[this.current].active;
-      const currency = this.current === 0 ? active + 1 : active === 0 ? 3 : 4;
       const params = {
         page: this.gatherList[this.current].page,
-        type: currency,
+        // 货币类型 1：USDT 2：配置U 3：NT 4：NTgas
+        type: Number(this.current) + 1,
       };
       if (this.gatherList[this.current].isEnd) {
         this.getCurrencyList(params);
@@ -282,11 +243,13 @@ export default {
         .catch((err) => {});
     },
   },
-  onLoad() {
-    this.getFlow();
-  },
+  onLoad() {},
   onShow() {
-    this.getUser();
+    this.gatherList[this.current].page = 1;
+    this.gatherList[this.current].list = [];
+    this.gatherList[this.current].isEnd = true;
+    this.getFlow();
+    // this.getUser();
   },
 };
 </script>
@@ -295,6 +258,9 @@ export default {
 .white {
   color: #fff;
   font-family: AlibabaPuHuiTi_2_65_Medium;
+}
+.wrapper {
+  padding-bottom: 150rpx;
 }
 .swiper-tips {
   margin-top: 10rpx;
@@ -321,62 +287,68 @@ export default {
     }
   }
 }
-.section-swiper {
-  margin-top: 50rpx;
-  height: 350rpx;
 
-  .swiper-item {
-    padding: 40rpx;
-    width: 80%;
-    border-radius: 6px 6px 0px 0px;
-    margin: 0 auto;
-    color: #fff;
-    position: relative;
+.swiper-item {
+  padding: 40rpx 40rpx 20rpx;
+  width: 75%;
+  border-radius: 6px 6px 0px 0px;
+  margin: 0 auto;
+  color: #fff;
+  position: relative;
 
-    .info {
-      background-color: #debf92;
-      padding: 5rpx 10rpx;
-      border-radius: 50px;
-      position: absolute;
-      right: 30rpx;
-      top: 20rpx;
-      color: #575153;
-      font-family: AlibabaPuHuiTi_2_65_Medium;
+  .info {
+    background-color: #debf92;
+    padding: 5rpx 10rpx;
+    border-radius: 50px;
+    position: absolute;
+    right: 30rpx;
+    top: 20rpx;
+    color: #575153;
+    font-family: AlibabaPuHuiTi_2_65_Medium;
 
-      .money {
-        margin-left: 10rpx;
-      }
-    }
-
-    .usable {
-      font-size: 32rpx;
-      margin-bottom: 10rpx;
-      // font-family: AlibabaPuHuiTi_2_55_Regular;
-    }
-
-    .balance {
-      font-size: 60rpx;
-      margin-bottom: 40rpx;
-    }
-
-    .title {
-    }
-
-    .number {
+    .money {
       margin-left: 10rpx;
-      font-size: 40rpx;
     }
   }
 
-  .first {
-    // background: linear-gradient(322deg, #D7AE73 0%, #DBC395 100%);
-    background: linear-gradient(to right, #dbc395, #d7ae73);
+  .usable {
+    font-size: 32rpx;
+    margin-bottom: 10rpx;
+    // font-family: AlibabaPuHuiTi_2_55_Regular;
   }
 
-  .second {
-    // background: linear-gradient(322deg, #c57b15 0%, #DBC395 100%);
-    background: linear-gradient(to right, #c67e1b, #dbc395);
+  .balance {
+    font-size: 60rpx;
+    margin-bottom: 40rpx;
   }
+
+  .title {
+  }
+
+  .number {
+    margin-left: 10rpx;
+    font-size: 40rpx;
+  }
+
+  .icon-item {
+    background: #39353e;
+    border-radius: 20px;
+    padding: 8rpx 25rpx;
+    font-size: 25rpx;
+    margin-left: 20rpx;
+    margin-top: 20rpx;
+  }
+}
+
+.first {
+  // background: linear-gradient(322deg, #D7AE73 0%, #DBC395 100%);
+  background: linear-gradient(to right, #dbc395, #d7ae73);
+}
+
+.second {
+  // background: linear-gradient(322deg, #c57b15 0%, #DBC395 100%);
+  background: linear-gradient(to right, #c67e1b, #dbc395);
+  margin-top: 50rpx;
 }
 
 .section-icon {

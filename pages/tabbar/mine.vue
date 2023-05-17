@@ -1,10 +1,15 @@
 <template>
   <view>
-    <DialogTips :hasTips.sync="hasQrCode"></DialogTips>
+    <!-- 客服 -->
+    <DialogTips
+      :hasTips.sync="hasQrCode"
+      :serviceQrCode="user.kf_qr_codeval"
+    ></DialogTips>
+    <!-- 购买弹框 -->
     <DialogTips :hasTips.sync="hasBuy">
       <view slot="title">购买额外释放权限</view>
       <view slot="content"
-        >支付300配置U购买1%的释放权限 释放权限最大为百分之五，永久有效</view
+        >支付300配置U购买1%的释放权限 释放权限最大为5%，永久有效</view
       >
       <view slot="footer">
         <!-- <view class="d-flex align-items-center justify-center"> -->
@@ -26,6 +31,7 @@
         </view>
       </view>
     </DialogTips>
+    <!-- 支付密码 -->
     <DialogPay
       :hasVerification.sync="hasVerification"
       @confirmIdentify="confirmIdentify"

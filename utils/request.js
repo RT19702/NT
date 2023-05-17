@@ -21,8 +21,8 @@ function request({ url, data = {}, method = "GET" }) {
     return new Promise((resolve, reject) => {
         uni.request({
             url: baseUrl + url,
-            data: data,
-            method: method,
+            data,
+            method,
             header: {
                 'Content-Type': 'application/json; charset=UTF-8',
                 'TOKEN': getToken()

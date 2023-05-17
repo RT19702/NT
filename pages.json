@@ -37,94 +37,93 @@
 			}
 		}
 	],
-	"subPackages": [
-		{
-			"root": "subpackages",
-			"pages": [
-				{
-					"path": "recommend/recommend",
-					"style": {}
-				},
-				{
-					"path": "team/team",
-					"style": {
-						"navigationBarTitleText": "",
-						"enablePullDownRefresh": false
-					}
-				},
-				{
-					"path": "safety/safety",
-					"style": {
-						"navigationBarTitleText": "",
-						"enablePullDownRefresh": false
-					}
-				},
-				{
-					"path": "community/community",
-					"style": {
-						"navigationBarTitleText": "",
-						"enablePullDownRefresh": false
-					}
-				},
-				{
-					"path": "articles/articles",
-					"style": {
-						"navigationBarTitleText": "",
-						"enablePullDownRefresh": false
-					}
-				},
-				{
-					"path": "articles/article",
-					"style": {
-						"navigationBarTitleText": "",
-						"enablePullDownRefresh": false
-					}
-				},
-				{
-					"path": "transaction/transaction",
-					"style": {
-						"navigationBarTitleText": "",
-						"enablePullDownRefresh": false
-					}
-				},
-				{
-					"path": "consensus/consensus",
-					"style": {
-						"navigationBarTitleText": "",
-						"enablePullDownRefresh": false
-					}
-				},
-				{
-					"path": "consensus/consensusDetail",
-					"style": {
-						"navigationBarTitleText": "",
-						"enablePullDownRefresh": true
-					}
-				},
-				{
-					"path": "consensus/consensusRecording",
-					"style": {
-						"navigationBarTitleText": "",
-						"enablePullDownRefresh": false
-					}
+	"subPackages": [{
+		"root": "subpackages",
+		"pages": [{
+				"path": "recommend/recommend",
+				"style": {}
+			},
+			{
+				"path": "team/team",
+				"style": {
+					"navigationBarTitleText": "",
+					"enablePullDownRefresh": false
 				}
-			]
-		}
-	],
+			},
+			{
+				"path": "safety/safety",
+				"style": {
+					"navigationBarTitleText": "",
+					"enablePullDownRefresh": false
+				}
+			},
+			{
+				"path": "community/community",
+				"style": {
+					"navigationBarTitleText": "",
+					"enablePullDownRefresh": false
+				}
+			},
+			{
+				"path": "articles/articles",
+				"style": {
+					"navigationBarTitleText": "",
+					"enablePullDownRefresh": false
+				}
+			},
+			{
+				"path": "articles/article",
+				"style": {
+					"navigationBarTitleText": "",
+					"enablePullDownRefresh": false
+				}
+			},
+			{
+				"path": "transaction/transaction",
+				"style": {
+					"navigationBarTitleText": "",
+					"enablePullDownRefresh": false
+				}
+			},
+			{
+				"path": "consensus/consensus",
+				"style": {
+					"navigationBarTitleText": "",
+					"enablePullDownRefresh": false
+				}
+			},
+			{
+				"path": "consensus/consensusDetail",
+				"style": {
+					"navigationBarTitleText": "",
+					"enablePullDownRefresh": true
+				}
+			},
+			{
+				"path": "consensus/consensusRecording",
+				"style": {
+					"navigationBarTitleText": "",
+					"enablePullDownRefresh": false
+				}
+			}
+		]
+	}],
 	"globalStyle": {
 		"navigationStyle": "custom", // 不需要导航栏
 		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "NT",
 		"navigationBarBackgroundColor": "#F8F8F8",
-		"backgroundColor": "#F8F8F8"
+		"backgroundColor": "#F8F8F8",
+		"rpxCalcMaxDeviceWidth": 1024, // rpx 计算所支持的最大设备宽度，单位 px，默认值为 960
+		"rpxCalcBaseDeviceWidth": 375, // rpx 计算使用的基准设备宽度，设备实际宽度超出 rpx 计算所支持的最大设备宽度时将按基准宽度计算，单位 px，默认值为 375
+		"rpxCalcIncludeWidth": 750 // rpx 计算特殊处理的值，始终按实际的设备宽度计算，单位 rpx，默认值为 750
 	},
 	"tabBar": {
 		"backgroundColor": "#040611",
 		"color": "#fff",
 		"selectedColor": "#fff",
 		"borderStyle": "transparent",
-		"list": [
-			{
+		"list": [{
 				"pagePath": "pages/tabbar/index",
 				"iconPath": "static/images/tabbar/home.png",
 				"selectedIconPath": "static/images/tabbar/active_home.png",

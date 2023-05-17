@@ -20,8 +20,8 @@
           <view class="item">
             <view class="d-flex justify-between title">
               <view class="column">用户ID</view>
-              <view class="column">推荐人数</view>
-              <view class="">团队业绩</view>
+              <view class="column">团队人数</view>
+              <view class="">业绩</view>
             </view>
           </view>
           <u-list @scrolltolower="scrolltolower" height="600rpx">
@@ -32,7 +32,7 @@
                   <text class="sub-title">{{ item.level_name }}</text>
                 </view>
                 <view class="column">{{ item.team_nums }}</view>
-                <view class="">{{ item.achievement }}</view>
+                <view class="">{{ item.achievement_self }}</view>
               </view>
             </view>
           </u-list>

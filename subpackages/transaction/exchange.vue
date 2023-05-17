@@ -9,6 +9,25 @@
         <text>NTGAS</text>
       </view>
     </view>
+    <view class="item d-flex align-items-center justify-between">
+      <view class="label"> 充值方式 </view>
+      <view class="radio d-flex align-items-center">
+        <view class="radio-item d-flex align-items-center" @click="select(0)">
+          <view
+            class="round"
+            :class="[exchangeType === 'USDT' ? 'circle' : '']"
+          ></view>
+          <text>USDT</text>
+        </view>
+        <view class="radio-item d-flex align-items-center" @click="select(1)">
+          <view
+            class="round"
+            :class="[exchangeType === 'configU' ? 'circle' : '']"
+          ></view>
+          <text>配置U</text>
+        </view>
+      </view>
+    </view>
     <view class="content">
       <view class="d-flex align-items-center text">
         <view class="label">
@@ -37,13 +56,20 @@
 
 <script>
 export default {
-  props: ["amount"],
+  props: ["amount", "exchangeType"],
   data() {
     return {};
   },
   methods: {
     changAmount(value) {
       this.$emit("update:amount", value);
+    },
+    select(index) {
+      if (index === 0) {
+        this.$emit("update:exchangeType", "USDT");
+      } else {
+        this.$emit("update:exchangeType", "configU");
+      }
     },
   },
 };
@@ -67,7 +93,16 @@ export default {
   .radio {
     padding: 14rpx 20rpx;
     color: $theme-color;
-
+    .radio-item {
+      margin-left: 20rpx;
+    }
+    .round {
+      width: 15px;
+      height: 15px;
+      margin-right: 10rpx;
+      border: 1px solid $theme-color;
+      border-radius: 50%;
+    }
     .circle {
       width: 15px;
       height: 15px;

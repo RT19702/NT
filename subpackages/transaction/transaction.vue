@@ -25,20 +25,40 @@
         <RechargeNT
           v-if="type === 'recharge' && rechargeType === 'NT'"
           :amount.sync="amount"
+          :rechargeNtType.sync="rechargeNtType"
         />
         <!-- 兑换 -->
-        <Exchange v-if="type === 'exchange'" :amount.sync="amount">
-          <view slot="price">配置U余额：{{ user.dispose_u }}</view>
+        <Exchange
+          v-if="type === 'exchange' && exchangeType === 'USDT'"
+          :amount.sync="amount"
+          :exchangeType.sync="exchangeType"
+        >
+          <view slot="price">USDT余额：{{ user.usdt }}</view>
+          <!-- <view slot="price">配置U余额：{{ user.dispose_u }}</view> -->
         </Exchange>
-        <Exchange v-if="type === 'purchase'" :amount.sync="amount">
+        <Exchange
+          v-if="type === 'exchange' && exchangeType === 'configU'"
+          :amount.sync="amount"
+          :exchangeType.sync="exchangeType"
+        >
           <view slot="title">购买类型</view>
           <view slot="label">购买数量</view>
-          <view slot="price">USDT余额：{{ user.usdt }}</view>
+          <view slot="price">配置U余额：{{ user.dispose_u }}</view>
+          <!-- <view slot="price">USDT余额：{{ user.usdt }}</view> -->
         </Exchange>
-        <view class="tips" v-show="amount && type === 'purchase'"
+        <view
+          class="tips"
+          v-show="
+            (amount && type === 'exchange' && exchangeType === 'USDT') ||
+            (type === 'recharge' &&
+              rechargeNtType === 'USDT' &&
+              rechargeType === 'NT')
+          "
           >需扣除USDT：{{ amount }}</view
         >
-        <view class="tips" v-show="amount && type === 'exchange'"
+        <view
+          class="tips"
+          v-show="amount && type === 'exchange' && exchangeType === 'configU'"
           >需扣除配置U：{{ Number(amount * 1.2).toFixed(2) }}
         </view>
       </view>
@@ -86,9 +106,12 @@ export default {
       },
       type: "withdraw", // 默认值为提现
       rechargeType: "USDT", // 默认值为usdt
-      rechargeOption: {},
-      amount: null,
-      hasVerification: false,
+      rechargeOption: {}, // 充值选项参数
+      amount: null, // 金额
+      hasVerification: false, // 是否需要验证支付密码
+      exchangeType: "USDT", // 兑换类型
+      // 充值NT类型
+      rechargeNtType: "USDT",
     };
   },
   methods: {
@@ -104,14 +127,14 @@ export default {
           }
           break;
         // 购买
-        case "purchase":
+        /* case "purchase":
           if (this.amount) {
             // this.purchase();
             this.hasVerification = true;
           } else {
             this.$showToast("请输入购买数量");
           }
-          break;
+          break; */
         // 兑换
         case "exchange":
           if (this.amount) {
@@ -145,13 +168,13 @@ export default {
     // 确认支付密码
     confirmIdentify(cipher) {
       this.hasVerification = false;
-      switch (this.type) {
+      switch (this.exchangeType) {
         // 购买
-        case "purchase":
+        case "USDT":
           this.purchase(cipher);
           break;
         // 兑换
-        case "exchange":
+        case "configU":
           this.exchange(cipher);
           break;
 
@@ -176,7 +199,7 @@ export default {
         }
       });
     },
-    // 购买
+    // USDT购买
     purchase(cipher) {
       const params = {
         type: 2,
@@ -195,7 +218,7 @@ export default {
         }
       });
     },
-    // 兑换
+    // 配置U兑换
     exchange(cipher) {
       const params = {
         type: 2,
@@ -264,45 +287,52 @@ export default {
     // 充值NT
     rechargeNT() {
       const that = this;
+      let pay_type = this.rechargeNtType === "USDT" ? 1 : 3;
       const params = {
         type: 1,
-        pay_type: 3,
+        pay_type,
         nums: this.amount,
       };
-      const { toBuyAddress } = require("@/common/setting.js");
+      const { depositAddress } = require("@/common/setting.js");
       // let swapamount = BigNumber(this.amount).times(1e18).toFixed(0);
-      exchangeCurrencyApi(params).then((res) => {
-        if (res.code === 0) {
-          let { order_sn, amount } = res.data;
-          that.$showLoading("交易中");
-          /* 2、提交支付 */
-          that.$store
-            .dispatch("web3/transferSet", {
-              amount: BigNumber(amount).times(1e18).toFixed(0),
-              to: toBuyAddress,
-            })
-            .then((res) => {
-              that.$hideLoading();
-              const transactionHash = res.transactionHash;
-              rechargeCallbackApi({
-                hash: transactionHash,
-                order_sn,
-              })
-                .then((res) => {
-                  that.$showToast(res.msg);
-                  that.amount = null;
-                  // that.$store.dispatch("web3/getBalanceOfUsdt");
-                })
-                .catch((err) => {});
-            })
-            .catch((err) => {
-              that.$showToast(err.message);
-              that.$hideLoading();
-            });
-        } else {
+      if (pay_type === 1) {
+        that.$showLoading("交易中");
+        exchangeCurrencyApi(params).then((res) => {
+          that.amount = null;
           that.$showToast(res.msg);
-        }
-      });
+        });
+      } else {
+        exchangeCurrencyApi(params).then((res) => {
+          if (res.code === 0) {
+            let { order_sn, amount } = res.data;
+            that.$showLoading("交易中");
+            that.$store
+              .dispatch("web3/transferSet", {
+                amount: BigNumber(amount).times(1e18).toFixed(0),
+                to: depositAddress,
+              })
+              .then((res) => {
+                that.$hideLoading();
+                const transactionHash = res.transactionHash;
+                rechargeCallbackApi({
+                  hash: transactionHash,
+                  order_sn,
+                })
+                  .then((res) => {
+                    that.$showToast(res.msg);
+                    that.amount = null;
+                  })
+                  .catch((err) => {});
+              })
+              .catch((err) => {
+                that.$showToast(err.message);
+                that.$hideLoading();
+              });
+          } else {
+            that.$showToast(res.msg);
+          }
+        });
+      }
     },
   },
   computed: {

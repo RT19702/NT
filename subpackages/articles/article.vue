@@ -6,7 +6,7 @@
       <view class="date text-center">{{
         particulars.addtime | filterTime
       }}</view>
-      <view v-html="particulars.content"></view>
+      <view v-html="particulars.content" class="content"></view>
     </view>
   </view>
 </template>
@@ -52,5 +52,8 @@ export default {
     margin: 20rpx 0;
     font-size: 26rpx;
   }
+	.content{
+		color: #fff;
+	}
 }
 </style>

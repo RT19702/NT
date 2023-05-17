@@ -100,7 +100,7 @@
                       height="160rpx"
                     ></u--image>
                     <view class="msg">{{
-                      newestDynamic.dynamic.content | filterHtml
+                      newestDynamic.dynamic.title | filterHtml
                     }}</view>
                   </view>
                 </view>
